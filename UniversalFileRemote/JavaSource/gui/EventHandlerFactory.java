@@ -72,6 +72,26 @@ public class EventHandlerFactory {
 						setParametersCopyFile(parameterPane, layout);
 						break;
 					}
+					case Keys.Operation_ordnerSuchen: {
+						setParametersBlank(parameterPane);
+						break;
+					}
+					case Keys.Operation_ordnerLoeschen: {
+						setParametersBlank(parameterPane);
+						break;
+					}
+					case Keys.Operation_ordnerUmbenennen: {
+						setParametersRename(parameterPane, layout);
+						break;
+					}
+					case Keys.Operation_ordnerVerschieben: {
+						setParametersMoveFile(parameterPane, layout);
+						break;
+					}
+					case Keys.Operation_ordnerKopieren: {
+						setParametersCopyFile(parameterPane, layout);
+						break;
+					}
 					default:
 						//do nothing
 				}
@@ -238,6 +258,26 @@ public class EventHandlerFactory {
 						}
 						case Keys.Operation_dateiSuchen: {
 							Logic.searchFilenames(params);
+							break;
+						}
+						case Keys.Operation_ordnerLoeschen: {
+							Logic.deleteFolders(params);
+							break;
+						}
+						case Keys.Operation_ordnerUmbenennen: {
+							Logic.renameFolders(params);
+							break;
+						}
+						case Keys.Operation_ordnerVerschieben: {
+							Logic.moveFolders(params);
+							break;
+						}
+						case Keys.Operation_ordnerKopieren: {
+							Logic.copyFolders(params);
+							break;
+						}
+						case Keys.Operation_ordnerSuchen: {
+							Logic.searchFolders(params);
 							break;
 						}
 						default:

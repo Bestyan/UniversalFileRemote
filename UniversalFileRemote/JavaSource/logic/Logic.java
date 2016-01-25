@@ -115,6 +115,34 @@ public class Logic {
 	 * <li>Boolean onlyProjects</li>
 	 * <li>ArrayList<OperationCondition> conditions</li>
 	 * 
+	 * <li>String newName</li>
+	 * </ul>
+	 */
+	public static void renameFolders(HashMap<String, Object> params){
+		String targetWorkspace = (String) params.get(Keys.Params_targetWorkspace);
+		String fileNames = (String) params.get(Keys.Params_fileName);
+		Boolean isRegex = (Boolean) params.get(Keys.Params_isRegex);
+		Boolean ignoreCase = (Boolean) params.get(Keys.Params_ignoreCase);
+		Boolean withPath = (Boolean) params.get(Keys.Params_withPath);
+		Boolean onlyProjects = (Boolean) params.get(Keys.Params_onlyProjects);
+		ArrayList<OperationCondition> conditions = (ArrayList<OperationCondition>) params.get(Keys.Params_conditions);
+		
+		String newName = (String) params.get(Keys.Params_newName);
+		ArrayList<File> files = FileLoader.loadFolders(targetWorkspace, isRegex, ignoreCase, onlyProjects, withPath, Util.splitFilenames(fileNames));
+		FileOperator fileOp = FileOperatorFactory.getFileOperatorBasicRenameFolders(files, conditions, newName);
+		fileOp.start();
+	}
+	
+	/**
+	 * @param params
+	 * <ul>
+	 * <li>String targetWorkspace</li>
+	 * <li>String fileName</li>
+	 * <li>Boolean isRegex</li>
+	 * <li>Boolean ignoreCase</li>
+	 * <li>Boolean onlyProjects</li>
+	 * <li>ArrayList<OperationCondition> conditions</li>
+	 * 
 	 * <li>String newPath</li>
 	 * <li>Boolean overwriteExisting</li>
 	 * <li>Boolean createDirs</li>
@@ -134,6 +162,38 @@ public class Logic {
 		Boolean createDirs = (Boolean) params.get(Keys.Params_createDirs);
 		ArrayList<File> files = FileLoader.loadFiles(targetWorkspace, isRegex, ignoreCase, onlyProjects, withPath, Util.splitFilenames(fileNames));
 		FileOperator fileOp = FileOperatorFactory.getFileOperatorCopyFile(files, conditions, newPath, overwriteExisting, createDirs);
+		fileOp.start();
+	}
+	
+	/**
+	 * @param params
+	 * <ul>
+	 * <li>String targetWorkspace</li>
+	 * <li>String fileName</li>
+	 * <li>Boolean isRegex</li>
+	 * <li>Boolean ignoreCase</li>
+	 * <li>Boolean onlyProjects</li>
+	 * <li>ArrayList<OperationCondition> conditions</li>
+	 * 
+	 * <li>String newPath</li>
+	 * <li>Boolean overwriteExisting</li>
+	 * <li>Boolean createDirs</li>
+	 * </ul>
+	 */
+	public static void copyFolders(HashMap<String, Object> params){
+		String targetWorkspace = (String) params.get(Keys.Params_targetWorkspace);
+		String fileNames = (String) params.get(Keys.Params_fileName);
+		Boolean isRegex = (Boolean) params.get(Keys.Params_isRegex);
+		Boolean ignoreCase = (Boolean) params.get(Keys.Params_ignoreCase);
+		Boolean withPath = (Boolean) params.get(Keys.Params_withPath);
+		Boolean onlyProjects = (Boolean) params.get(Keys.Params_onlyProjects);
+		ArrayList<OperationCondition> conditions = (ArrayList<OperationCondition>) params.get(Keys.Params_conditions);
+		
+		String newPath = (String) params.get(Keys.Params_newPath);
+		Boolean overwriteExisting = (Boolean) params.get(Keys.Params_overwriteExisting);
+		Boolean createDirs = (Boolean) params.get(Keys.Params_createDirs);
+		ArrayList<File> files = FileLoader.loadFolders(targetWorkspace, isRegex, ignoreCase, onlyProjects, withPath, Util.splitFilenames(fileNames));
+		FileOperator fileOp = FileOperatorFactory.getFileOperatorCopyFolder(files, conditions, newPath, overwriteExisting, createDirs);
 		fileOp.start();
 	}
 	
@@ -210,6 +270,38 @@ public class Logic {
 	 * <li>Boolean ignoreCase</li>
 	 * <li>Boolean onlyProjects</li>
 	 * <li>ArrayList<OperationCondition> conditions</li>
+	 * 
+	 * <li>String newPath</li>
+	 * <li>Boolean overwriteExisting</li>
+	 * <li>Boolean createDirs</li>
+	 * </ul>
+	 */
+	public static void moveFolders(HashMap<String, Object> params){
+		String targetWorkspace = (String) params.get(Keys.Params_targetWorkspace);
+		String fileNames = (String) params.get(Keys.Params_fileName);
+		Boolean isRegex = (Boolean) params.get(Keys.Params_isRegex);
+		Boolean ignoreCase = (Boolean) params.get(Keys.Params_ignoreCase);
+		Boolean withPath = (Boolean) params.get(Keys.Params_withPath);
+		Boolean onlyProjects = (Boolean) params.get(Keys.Params_onlyProjects);
+		ArrayList<OperationCondition> conditions = (ArrayList<OperationCondition>) params.get(Keys.Params_conditions);
+		
+		String newPath = (String) params.get(Keys.Params_newPath);
+		Boolean overwriteExisting = (Boolean) params.get(Keys.Params_overwriteExisting);
+		Boolean createDirs = (Boolean) params.get(Keys.Params_createDirs);
+		ArrayList<File> files = FileLoader.loadFolders(targetWorkspace, isRegex, ignoreCase, onlyProjects, withPath, Util.splitFilenames(fileNames));
+		FileOperator fileOp = FileOperatorFactory.getFileOperatorMoveFolders(files, conditions, newPath, overwriteExisting, createDirs);
+		fileOp.start();
+	}
+	
+	/** 
+	 * @param params
+	 * <ul>
+	 * <li>String targetWorkspace</li>
+	 * <li>String fileName</li>
+	 * <li>Boolean isRegex</li>
+	 * <li>Boolean ignoreCase</li>
+	 * <li>Boolean onlyProjects</li>
+	 * <li>ArrayList<OperationCondition> conditions</li>
 	 * </ul>
 	 */
 	public static void deleteFiles(HashMap<String, Object> params){
@@ -223,6 +315,31 @@ public class Logic {
 		
 		ArrayList<File> files = FileLoader.loadFiles(targetWorkspace, isRegex, ignoreCase, onlyProjects, withPath, Util.splitFilenames(fileNames));
 		FileOperator fileOp = FileOperatorFactory.getFileOperatorDeleteFiles(files, conditions);
+		fileOp.start();
+	}
+	
+	/** 
+	 * @param params
+	 * <ul>
+	 * <li>String targetWorkspace</li>
+	 * <li>String fileName</li>
+	 * <li>Boolean isRegex</li>
+	 * <li>Boolean ignoreCase</li>
+	 * <li>Boolean onlyProjects</li>
+	 * <li>ArrayList<OperationCondition> conditions</li>
+	 * </ul>
+	 */
+	public static void deleteFolders(HashMap<String, Object> params){
+		String targetWorkspace = (String) params.get(Keys.Params_targetWorkspace);
+		String fileNames = (String) params.get(Keys.Params_fileName);
+		Boolean isRegex = (Boolean) params.get(Keys.Params_isRegex);
+		Boolean ignoreCase = (Boolean) params.get(Keys.Params_ignoreCase);
+		Boolean withPath = (Boolean) params.get(Keys.Params_withPath);
+		Boolean onlyProjects = (Boolean) params.get(Keys.Params_onlyProjects);
+		ArrayList<OperationCondition> conditions = (ArrayList<OperationCondition>) params.get(Keys.Params_conditions);
+		
+		ArrayList<File> files = FileLoader.loadFolders(targetWorkspace, isRegex, ignoreCase, onlyProjects, withPath, Util.splitFilenames(fileNames));
+		FileOperator fileOp = FileOperatorFactory.getFileOperatorDeleteFolders(files, conditions);
 		fileOp.start();
 	}
 	
@@ -258,6 +375,52 @@ public class Logic {
 		
 		ArrayList<File> list = fileLoader.loadFilesRecursive(filenames, isRegex, ignoreCase, onlyProjects, withPath);
 		String logMsg = "\r\n" + "Gefundene Dateien:";
+		outerLoop : for(File file : list){
+			if(conditions != null){
+				for(OperationCondition con : conditions){
+					if(!con.isMet(file)){
+						logMsg += "\r\n" + "Bedingung " + con.toString(file) + " nicht erfüllt in " + file.getAbsolutePath();
+						continue outerLoop;
+					}
+				}
+			}
+			logMsg += "\t\r\n" + file.getAbsolutePath();
+		}
+		Log.log(logMsg, Log.Level.INFO);
+	}
+	
+	/**
+	 * 
+	 * @param params
+	 * <ul>
+	 * <li>String targetWorkspace</li>
+	 * <li>String fileName</li>
+	 * <li>Boolean isRegex</li>
+	 * <li>Boolean ignoreCase</li>
+	 * <li>Boolean onlyProjects</li>
+	 * <li>ArrayList<OperationCondition> conditions</li>
+	 * </ul>
+	 */
+	public static void searchFolders(HashMap<String, Object> params){
+		String targetWorkspace = (String) params.get(Keys.Params_targetWorkspace);
+		String fileName = (String) params.get(Keys.Params_fileName);
+		Boolean isRegex = (Boolean) params.get(Keys.Params_isRegex);
+		Boolean ignoreCase = (Boolean) params.get(Keys.Params_ignoreCase);
+		Boolean withPath = (Boolean) params.get(Keys.Params_withPath);
+		Boolean onlyProjects = (Boolean) params.get(Keys.Params_onlyProjects);
+		ArrayList<OperationCondition> conditions = (ArrayList<OperationCondition>) params.get(Keys.Params_conditions);
+		
+		
+		File workspace = new File(targetWorkspace);
+		FileLoader fileLoader = new FileLoader(workspace);
+		
+		ArrayList<String> filenames = Util.splitFilenames(fileName);
+		if(ignoreCase && !isRegex){
+			filenames = Util.toLowerCase(filenames);
+		}
+		
+		ArrayList<File> list = fileLoader.loadFoldersRecursive(filenames, isRegex, ignoreCase, onlyProjects, withPath);
+		String logMsg = "\r\n" + "Gefundene Ordner:";
 		outerLoop : for(File file : list){
 			if(conditions != null){
 				for(OperationCondition con : conditions){

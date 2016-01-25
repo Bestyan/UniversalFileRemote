@@ -14,7 +14,7 @@ import util.Util;
 @SuppressWarnings("unchecked")
 public class Operation {
 	public enum Type{
-		insert, add, replace, deleteFile, renameFile, moveFile, copyFile;
+		insert, add, replace, deleteFile, renameFile, moveFile, copyFile, deleteFolder, renameFolder, moveFolder, copyFolder;
 	}
 
 	public Operation(Type type){
@@ -41,6 +41,11 @@ public class Operation {
 			operationsList.add(Keys.Operation_dateiUmbenennen);
 			operationsList.add(Keys.Operation_dateiVerschieben);
 			operationsList.add(Keys.Operation_dateiLoeschen);
+			operationsList.add(Keys.Operation_ordnerSuchen);
+			operationsList.add(Keys.Operation_ordnerKopieren);
+			operationsList.add(Keys.Operation_ordnerUmbenennen);
+			operationsList.add(Keys.Operation_ordnerVerschieben);
+			operationsList.add(Keys.Operation_ordnerLoeschen);
 		}
 		return operationsList;
 	}
@@ -151,6 +156,18 @@ public class Operation {
 			case copyFile:
 				this.copyFile(f);
 				break;
+			case deleteFolder:
+				this.deleteFile(f);
+				break;
+			case renameFolder:
+				this.renameFile(f);
+				break;
+			case moveFolder:
+				this.moveFile(f);
+				break;
+			case copyFolder:
+				this.copyFile(f);
+				break;
 			default:
 
 		}
@@ -182,9 +199,9 @@ public class Operation {
 
 	protected void deleteFile(File file){
 		file.delete();
-		Log.log("Datei gelöscht: " + file.getAbsolutePath(), Log.Level.INFO);
+		Log.log("Datei/Ordner gelöscht: " + file.getAbsolutePath(), Log.Level.INFO);
 	}
-
+	
 	/**
 	 * fügt den insertString, falls nicht durch Condition anders spezifiziert, am Anfang der Datei ein.
 	 * @param file
@@ -222,7 +239,7 @@ public class Operation {
 		try {
 			File output = new File(file.getParent() + "\\" + newName);
 			if(output.exists()){
-				Log.log("Datei existiert bereits: " + file.getAbsolutePath(), Log.Level.ERROR);
+				Log.log("Datei/Ordner existiert bereits: " + file.getAbsolutePath(), Log.Level.ERROR);
 				return;
 			}
 			Files.move(file.toPath(), output.toPath(), StandardCopyOption.ATOMIC_MOVE);
@@ -231,8 +248,7 @@ public class Operation {
 			Log.log(e);
 		}
 	}
-
-
+	
 	protected void moveFile(File file){
 		String newPath = (String) this.getOperationData().get(Keys.Params_newPath);
 		Boolean overwriteExisting = (Boolean) this.getOperationData().get(Keys.Params_overwriteExisting);
@@ -258,10 +274,11 @@ public class Operation {
 			Log.log(e);
 		}
 	}
+	
 	protected boolean checkSurroundings(File output, Boolean createDirs) {
 		boolean valid = true;
 		if(output.exists()){
-			Log.log("Datei existiert bereits: " + output.getAbsolutePath(), Log.Level.ERROR);
+			Log.log("Datei/Ordner existiert bereits: " + output.getAbsolutePath(), Log.Level.ERROR);
 			valid = false;
 		}
 		if(createDirs){

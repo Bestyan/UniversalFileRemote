@@ -261,15 +261,18 @@ public class GuiUtil {
 				params.put(Keys.Params_replaceRegex, replaceRegex);
 				break;
 			}
-			case Keys.Operation_dateiLoeschen: {
+			case Keys.Operation_dateiLoeschen:
+			case Keys.Operation_ordnerLoeschen:{
 				break;
 			}
-			case Keys.Operation_dateiUmbenennen: {
+			case Keys.Operation_dateiUmbenennen:
+			case Keys.Operation_ordnerUmbenennen:{
 				String newName = GuiUtil.lookupTextField(layout, "#" + Ids.parameter_tfNeuerDateiname).getText();
 				params.put(Keys.Params_newName, newName);
 				break;
 			}
-			case Keys.Operation_dateiVerschieben: {
+			case Keys.Operation_dateiVerschieben:
+			case Keys.Operation_ordnerVerschieben:{
 				String newPath = GuiUtil.lookupTextField(layout, "#" + Ids.parameter_tfNeuerSpeicherort).getText();
 				params.put(Keys.Params_newPath, newPath);
 				Boolean overwriteExisting = new Boolean(GuiUtil.lookupCheckBox(layout, "#" + Ids.parameter_cbDateienUeberschreiben).isSelected());
@@ -278,7 +281,8 @@ public class GuiUtil {
 				params.put(Keys.Params_createDirs, createDirs);
 				break;
 			}
-			case Keys.Operation_dateiKopieren: {
+			case Keys.Operation_dateiKopieren:
+			case Keys.Operation_ordnerKopieren:{
 				String newPath = GuiUtil.lookupTextField(layout, "#" + Ids.parameter_tfNeuerSpeicherort).getText();
 				params.put(Keys.Params_newPath, newPath);
 				Boolean overwriteExisting = new Boolean(GuiUtil.lookupCheckBox(layout, "#" + Ids.parameter_cbDateienUeberschreiben).isSelected());
@@ -287,7 +291,8 @@ public class GuiUtil {
 				params.put(Keys.Params_createDirs, createDirs);
 				break;
 			}
-			case Keys.Operation_dateiSuchen: {
+			case Keys.Operation_dateiSuchen:
+			case Keys.Operation_ordnerSuchen:{
 				break;
 			}
 			default:{

@@ -41,6 +41,11 @@ public class Keys {
 	public static final String Operation_dateiUmbenennen = "Datei umbenennen";
 	public static final String Operation_dateiVerschieben = "Datei verschieben";
 	public static final String Operation_dateiLoeschen = "Datei löschen";
+	public static final String Operation_ordnerSuchen = "Ordner suchen";
+	public static final String Operation_ordnerKopieren = "Ordner kopieren";
+	public static final String Operation_ordnerUmbenennen = "Ordner umbenennen";
+	public static final String Operation_ordnerVerschieben = "Ordner verschieben";
+	public static final String Operation_ordnerLoeschen = "Ordner löschen";
 	
 	//conditions fileType
 	public static final String Condition_dieseDatei = "diese Datei";

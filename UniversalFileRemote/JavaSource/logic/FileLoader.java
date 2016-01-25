@@ -50,6 +50,24 @@ public class FileLoader {
 			return this.startCollectFilesRecursive(this.root(), filenames, onlyProjects, ignoreCase, withPath);
 		}
 	}
+	
+	/**
+	 * 
+	 * @param filenames nur Kleinbuchstaben
+	 * @return
+	 */
+	public ArrayList<File> loadFoldersRecursive (ArrayList<String> filenames, boolean filenameIsRegex, boolean ignoreCase, boolean onlyProjects, boolean withPath){
+		if(!this.root().isDirectory()){
+			Log.log("root is invalid: " + this.root().getAbsolutePath(), Level.ERROR);
+		}
+		if(filenameIsRegex){
+//			return this.collectRegexFilesRecursive(this.root(), filenames);
+			return this.startCollectRegexFoldersRecursive(this.root(), filenames, onlyProjects, withPath);
+		} else{
+//			return this.collectFilesRecursive(this.root(), filenames, ignoreCase);
+			return this.startCollectFoldersRecursive(this.root(), filenames, onlyProjects, ignoreCase, withPath);
+		}
+	}
 
 	/**
 	 * filtert nach Projekten falls {@code onlyProjects == true}
@@ -85,6 +103,43 @@ public class FileLoader {
 		}
 		return list;
 	}
+	
+	/**
+	 * filtert nach Projekten falls {@code onlyProjects == true}
+	 * @param dir
+	 * @param filenames
+	 * @param onlyProjects
+	 * @param ignoreCase
+	 * @return
+	 */
+	protected ArrayList<File> startCollectFoldersRecursive(File dir, ArrayList<String> filenames, boolean onlyProjects,
+			boolean ignoreCase, boolean withPath) {
+		
+		ArrayList<File> list = new ArrayList<>();
+		for(File file : dir.listFiles()){
+			if(onlyProjects && !file.getAbsolutePath().contains("com.athos.")){
+				continue;
+			}
+			if(file.isDirectory()){
+				String filename = file.getName();
+				if(ignoreCase){
+					filename = filename.toLowerCase();
+				}
+				if(withPath){
+					if(file.exists() && Util.containsContainsMatch(filenames, file.getAbsolutePath())){
+						list.add(file);
+					} else{
+						list.addAll(this.collectFoldersRecursive(file, filenames, ignoreCase, withPath));
+					}
+				} else if(file.exists() && filenames.contains(filename)){
+					list.add(file);
+				} else{
+					list.addAll(this.collectFoldersRecursive(file, filenames, ignoreCase, withPath));
+				}
+			}
+		}
+		return list;
+	}
 
 	/**
 	 * filtert nach Projekten falls {@code onlyProjects == true}
@@ -108,6 +163,36 @@ public class FileLoader {
 					}
 				} else if(file.exists() && Util.containsRegexMatch(filenames, file.getName())){
 					list.add(file);
+				}
+			}
+		}
+		return list;
+	}
+	
+	/**
+	 * filtert nach Projekten falls {@code onlyProjects == true}
+	 * @param dir
+	 * @param filenames
+	 * @param onlyProjects
+	 * @return
+	 */
+	protected ArrayList<File> startCollectRegexFoldersRecursive(File dir, ArrayList<String> filenames, boolean onlyProjects, boolean withPath) {
+		ArrayList<File> list = new ArrayList<>();
+		for(File file : dir.listFiles()){
+			if(onlyProjects && !file.getAbsolutePath().contains("com.athos.")){
+				continue;
+			}
+			if(file.isDirectory()){
+				if(withPath){
+					if(file.exists() && Util.containsRegexMatch(filenames, file.getAbsolutePath())){
+						list.add(file);
+					} else{
+						list.addAll(this.collectRegexFoldersRecursive(file, filenames, withPath));
+					}
+				} else if(file.exists() && Util.containsRegexMatch(filenames, file.getName())){
+					list.add(file);
+				} else{
+					list.addAll(this.collectRegexFoldersRecursive(file, filenames, withPath));
 				}
 			}
 		}
@@ -142,6 +227,35 @@ public class FileLoader {
 	}
 	
 	/**
+	 * sucht rekursiv alle Verzeichnisse nach den in filenames spezifizierten Ordnern
+	 * @param dir
+	 * @return
+	 */
+	protected ArrayList<File> collectFoldersRecursive(File dir, ArrayList<String> filenames, boolean ignoreCase, boolean withPath){
+		ArrayList<File> list = new ArrayList<>();
+		for(File file : dir.listFiles()){
+			if(file.isDirectory()){
+				String filename = withPath ? file.getAbsolutePath() : file.getName();
+				if(ignoreCase){
+					filename = filename.toLowerCase();
+				}
+				if(withPath){
+					if(file.exists() && Util.containsContainsMatch(filenames, filename)){
+						list.add(file);
+					} else{
+						list.addAll(this.collectFoldersRecursive(file, filenames, ignoreCase, withPath));
+					}
+				} else if(file.exists() && filenames.contains(filename)){
+					list.add(file);
+				} else{
+					list.addAll(this.collectFoldersRecursive(file, filenames, ignoreCase, withPath));
+				}
+			}
+		}
+		return list;
+	}
+	
+	/**
 	 * sucht rekursiv alle Verzeichnisse nach den in filenames spezifizierten Dateien, die als Regex interpretiert werden
 	 * @param dir
 	 * @return
@@ -158,6 +272,31 @@ public class FileLoader {
 					}
 				} else if(file.exists() && Util.containsRegexMatch(filenames, file.getName())){
 					list.add(file);
+				}
+			}
+		}
+		return list;
+	}
+	
+	/**
+	 * sucht rekursiv alle Verzeichnisse nach den in filenames spezifizierten Dateien, die als Regex interpretiert werden
+	 * @param dir
+	 * @return
+	 */
+	protected ArrayList<File> collectRegexFoldersRecursive(File dir, ArrayList<String> filenames, boolean withPath){
+		ArrayList<File> list = new ArrayList<>();
+		for(File file : dir.listFiles()){
+			if(file.isDirectory()){
+				if(withPath){
+					if(file.exists() && Util.containsContainsRegexMatch(filenames, file.getAbsolutePath())){
+						list.add(file);
+					} else{
+						list.addAll(this.collectRegexFoldersRecursive(file, filenames, withPath));
+					}
+				} else if(file.exists() && Util.containsRegexMatch(filenames, file.getName())){
+					list.add(file);
+				} else{
+					list.addAll(this.collectRegexFoldersRecursive(file, filenames, withPath));
 				}
 			}
 		}
@@ -183,6 +322,22 @@ public class FileLoader {
 			Log.log("\r\n" + "Keine Dateien für " + Util.ArrayListToString(filenames) + " gefunden", Log.Level.INFO);
 		} else{
 			Log.log("\r\n" + results.size() + " Dateien geladen", Log.Level.INFO);
+		}
+		return results;
+	}
+	
+	public static ArrayList<File> loadFolders(String rootDir, boolean filenameIsRegex, boolean ignoreCase, boolean onlyProjects, boolean withPath, ArrayList<String> filenames){
+		ArrayList<String> filenameList = new ArrayList<>();
+		for(String s : filenames){
+			//falls ignoreCase true und isRegex false sind, wird der Dateiname lowercase gemacht
+			filenameList.add((ignoreCase && !filenameIsRegex ? s.toLowerCase() : s));
+		}
+		FileLoader fileLoader = new FileLoader(new File(rootDir));
+		ArrayList<File> results = fileLoader.loadFoldersRecursive(filenameList, filenameIsRegex, ignoreCase, onlyProjects, withPath);
+		if(results.isEmpty()){
+			Log.log("\r\n" + "Keine Ordner für " + Util.ArrayListToString(filenames) + " gefunden", Log.Level.INFO);
+		} else{
+			Log.log("\r\n" + results.size() + " Ordner geladen", Log.Level.INFO);
 		}
 		return results;
 	}

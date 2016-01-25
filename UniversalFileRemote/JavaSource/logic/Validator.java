@@ -195,17 +195,20 @@ public class Validator {
 				valid = Validator.checkReplaceParams(params);
 				break;
 			}
-			case Keys.Operation_dateiLoeschen: {
+			case Keys.Operation_dateiLoeschen:
+			case Keys.Operation_ordnerLoeschen:{
 				valid = Validator.checkMandatoryParams(params);
 				break;
 			}
-			case Keys.Operation_dateiUmbenennen: {
+			case Keys.Operation_dateiUmbenennen:
+			case Keys.Operation_ordnerUmbenennen:{
 				String newName = GuiUtil.lookupTextField(layout, "#" + Ids.parameter_tfNeuerDateiname).getText();
 				params.put(Keys.Params_newName, newName);
 				valid = Validator.checkRenameFilesParams(params);
 				break;
 			}
-			case Keys.Operation_dateiVerschieben: {
+			case Keys.Operation_dateiVerschieben:
+			case Keys.Operation_ordnerVerschieben:{
 				String newPath = GuiUtil.lookupTextField(layout, "#" + Ids.parameter_tfNeuerSpeicherort).getText();
 				params.put(Keys.Params_newPath, newPath);
 				Boolean overwriteExisting = new Boolean(GuiUtil.lookupCheckBox(layout, "#" + Ids.parameter_cbDateienUeberschreiben).isSelected());
@@ -215,7 +218,8 @@ public class Validator {
 				valid = Validator.checkMoveOrCopyFilesParams(params);
 				break;
 			}
-			case Keys.Operation_dateiKopieren: {
+			case Keys.Operation_dateiKopieren:
+			case Keys.Operation_ordnerKopieren:{
 				String newPath = GuiUtil.lookupTextField(layout, "#" + Ids.parameter_tfNeuerSpeicherort).getText();
 				params.put(Keys.Params_newPath, newPath);
 				Boolean overwriteExisting = new Boolean(GuiUtil.lookupCheckBox(layout, "#" + Ids.parameter_cbDateienUeberschreiben).isSelected());
@@ -225,7 +229,8 @@ public class Validator {
 				valid = Validator.checkMoveOrCopyFilesParams(params);
 				break;
 			}
-			case Keys.Operation_dateiSuchen: {
+			case Keys.Operation_dateiSuchen:
+			case Keys.Operation_ordnerSuchen:{
 				valid = Validator.checkMandatoryParams(params);
 				break;
 			}
