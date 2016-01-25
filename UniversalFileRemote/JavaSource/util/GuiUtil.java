@@ -231,6 +231,7 @@ public class GuiUtil {
 		result.put(Keys.Params_ignoreCase, ignoreCase);
 		result.put(Keys.Params_withPath, withPath);
 		result.put(Keys.Params_onlyProjects, onlyProjects);
+		result.put(Keys.Params_conditions, conditions);
 		return result;
 	}
 	

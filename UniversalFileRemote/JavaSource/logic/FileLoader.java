@@ -46,7 +46,6 @@ public class FileLoader {
 //			return this.collectRegexFilesRecursive(this.root(), filenames);
 			return this.startCollectRegexFilesRecursive(this.root(), filenames, onlyProjects, withPath);
 		} else{
-			filenames = Util.toLowerCase(filenames);
 //			return this.collectFilesRecursive(this.root(), filenames, ignoreCase);
 			return this.startCollectFilesRecursive(this.root(), filenames, onlyProjects, ignoreCase, withPath);
 		}

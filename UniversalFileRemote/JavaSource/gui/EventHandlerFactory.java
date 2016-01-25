@@ -202,45 +202,49 @@ public class EventHandlerFactory {
 			@SuppressWarnings("unchecked")
 			@Override
 			public void handle(ActionEvent event) {
-				Scene scene = ((Node)event.getSource()).getScene();
-				ComboBox<String> operations = (ComboBox<String>)scene.lookup("#" + Ids.main_comboOperation);
-				HashMap<String, Object> params = GuiUtil.getParamsFor(layout, operations.getValue());
+				try{
+					Scene scene = ((Node)event.getSource()).getScene();
+					ComboBox<String> operations = (ComboBox<String>)scene.lookup("#" + Ids.main_comboOperation);
+					HashMap<String, Object> params = GuiUtil.getParamsFor(layout, operations.getValue());
 
-				switch(operations.getValue()){
-					case Keys.Operation_anfuegen: {
-						Logic.add(params);
-						break;
+					switch(operations.getValue()){
+						case Keys.Operation_anfuegen: {
+							Logic.add(params);
+							break;
+						}
+						case Keys.Operation_einfuegen: {
+							Logic.insertIntoFiles(params);
+							break;
+						}
+						case Keys.Operation_ersetzen: {
+							Logic.replace(params);
+							break;
+						}
+						case Keys.Operation_dateiLoeschen: {
+							Logic.deleteFiles(params);
+							break;
+						}
+						case Keys.Operation_dateiUmbenennen: {
+							Logic.rename(params);
+							break;
+						}
+						case Keys.Operation_dateiVerschieben: {
+							Logic.moveFiles(params);
+							break;
+						}
+						case Keys.Operation_dateiKopieren: {
+							Logic.copyFiles(params);
+							break;
+						}
+						case Keys.Operation_dateiSuchen: {
+							Logic.searchFilenames(params);
+							break;
+						}
+						default:
+							//do nothing
 					}
-					case Keys.Operation_einfuegen: {
-						Logic.insertIntoFiles(params);
-						break;
-					}
-					case Keys.Operation_ersetzen: {
-						Logic.replace(params);
-						break;
-					}
-					case Keys.Operation_dateiLoeschen: {
-						Logic.deleteFiles(params);
-						break;
-					}
-					case Keys.Operation_dateiUmbenennen: {
-						Logic.rename(params);
-						break;
-					}
-					case Keys.Operation_dateiVerschieben: {
-						Logic.moveFiles(params);
-						break;
-					}
-					case Keys.Operation_dateiKopieren: {
-						Logic.copyFiles(params);
-						break;
-					}
-					case Keys.Operation_dateiSuchen: {
-						Logic.searchFilenames(params);
-						break;
-					}
-					default:
-						//do nothing
+				} catch(Exception e){
+					Log.log(e);
 				}
 			}
 		};

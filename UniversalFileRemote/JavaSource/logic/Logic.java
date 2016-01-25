@@ -259,10 +259,12 @@ public class Logic {
 		ArrayList<File> list = fileLoader.loadFilesRecursive(filenames, isRegex, ignoreCase, onlyProjects, withPath);
 		String logMsg = "\r\n" + "Gefundene Dateien:";
 		outerLoop : for(File file : list){
-			for(OperationCondition con : conditions){
-				if(!con.isMet(file)){
-					logMsg += "\r\n" + "Bedingung " + con.toString(file) + " nicht erfüllt in " + file.getAbsolutePath();
-					continue outerLoop;
+			if(conditions != null){
+				for(OperationCondition con : conditions){
+					if(!con.isMet(file)){
+						logMsg += "\r\n" + "Bedingung " + con.toString(file) + " nicht erfüllt in " + file.getAbsolutePath();
+						continue outerLoop;
+					}
 				}
 			}
 			logMsg += "\t\r\n" + file.getAbsolutePath();
