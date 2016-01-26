@@ -36,8 +36,11 @@ public class EventHandlerFactory {
 			@Override
 			public void handle(ActionEvent event) {
 				ComboBox<String> source = (ComboBox<String>)event.getSource();
-				GridPane parameterPane = (GridPane)((Node)event.getSource()).getScene().lookup("#" + Ids.main_paneParameter);
+				Scene scene = ((Node)event.getSource()).getScene();
+				GridPane parameterPane = (GridPane) scene.lookup("#" + Ids.main_paneParameter);
 				Pane layout = (Pane) parameterPane.getParent();
+				setConcernsAllEnabled(source.getValue(), scene);
+				
 				parameterPane.getChildren().removeAll(parameterPane.getChildren());
 				switch(source.getValue()){
 					case Keys.Operation_anfuegen: {
@@ -211,6 +214,32 @@ public class EventHandlerFactory {
 		taAddString.setId(Ids.parameter_taAddString);
 		taAddString.textProperty().addListener(ListenerFactory.getStartOperationValidatorChangeListener(layout));
 		parameterPane.add(GuiUtil.getWrappedInPane(taAddString), 1, 0, 2, 1);
+	}
+	
+	public static void setConcernsAllEnabled(String value, Scene scene){
+		CheckBox concernsAllFolders = GuiUtil.lookupCheckBox(scene, "#" + Ids.main_cbConcernsAll);
+		switch(value){
+			case Keys.Operation_anfuegen:
+			case Keys.Operation_einfuegen:
+			case Keys.Operation_ersetzen:
+			case Keys.Operation_dateiSuchen:
+			case Keys.Operation_dateiUmbenennen:
+			case Keys.Operation_dateiVerschieben:
+			case Keys.Operation_ordnerSuchen:
+			case Keys.Operation_ordnerVerschieben:
+			case Keys.Operation_ordnerUmbenennen:
+			case Keys.Operation_dateiLoeschen:
+			case Keys.Operation_ordnerLoeschen:
+				concernsAllFolders.setSelected(false);
+				concernsAllFolders.setDisable(true);
+				break;
+			case Keys.Operation_dateiKopieren:
+			case Keys.Operation_ordnerKopieren:
+				concernsAllFolders.setDisable(false);
+				break;
+			default:
+				//do nothing
+		}
 	}
 	
 	/**

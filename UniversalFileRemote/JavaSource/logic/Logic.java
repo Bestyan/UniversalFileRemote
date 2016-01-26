@@ -129,7 +129,7 @@ public class Logic {
 		
 		String newName = (String) params.get(Keys.Params_newName);
 		ArrayList<File> files = FileLoader.loadFolders(targetWorkspace, isRegex, ignoreCase, onlyProjects, withPath, Util.splitFilenames(fileNames));
-		FileOperator fileOp = FileOperatorFactory.getFileOperatorBasicRenameFolders(files, conditions, newName);
+		FileOperator fileOp = FileOperatorFactory.getFileOperatorBasicRename(files, conditions, newName);
 		fileOp.start();
 	}
 	
@@ -155,13 +155,20 @@ public class Logic {
 		Boolean ignoreCase = (Boolean) params.get(Keys.Params_ignoreCase);
 		Boolean withPath = (Boolean) params.get(Keys.Params_withPath);
 		Boolean onlyProjects = (Boolean) params.get(Keys.Params_onlyProjects);
+		Boolean concernsAll = (Boolean) params.get(Keys.Params_concernsAll);
 		ArrayList<OperationCondition> conditions = (ArrayList<OperationCondition>) params.get(Keys.Params_conditions);
 		
 		String newPath = (String) params.get(Keys.Params_newPath);
 		Boolean overwriteExisting = (Boolean) params.get(Keys.Params_overwriteExisting);
 		Boolean createDirs = (Boolean) params.get(Keys.Params_createDirs);
-		ArrayList<File> files = FileLoader.loadFiles(targetWorkspace, isRegex, ignoreCase, onlyProjects, withPath, Util.splitFilenames(fileNames));
-		FileOperator fileOp = FileOperatorFactory.getFileOperatorCopyFile(files, conditions, newPath, overwriteExisting, createDirs);
+		FileOperator fileOp = null;
+		if(concernsAll){
+			ArrayList<File> files = FileLoader.loadFiles(Util.splitFilenames(fileNames));
+			fileOp = FileOperatorFactory.getFileOperatorCopyAbsoluteFile(files, conditions, targetWorkspace, newPath, overwriteExisting, createDirs, onlyProjects);
+		} else{
+			ArrayList<File> files = FileLoader.loadFiles(targetWorkspace, isRegex, ignoreCase, onlyProjects, withPath, Util.splitFilenames(fileNames));
+			fileOp = FileOperatorFactory.getFileOperatorCopyFile(files, conditions, newPath, overwriteExisting, createDirs);
+		}
 		fileOp.start();
 	}
 	
@@ -187,13 +194,20 @@ public class Logic {
 		Boolean ignoreCase = (Boolean) params.get(Keys.Params_ignoreCase);
 		Boolean withPath = (Boolean) params.get(Keys.Params_withPath);
 		Boolean onlyProjects = (Boolean) params.get(Keys.Params_onlyProjects);
+		Boolean concernsAll = (Boolean) params.get(Keys.Params_concernsAll);
 		ArrayList<OperationCondition> conditions = (ArrayList<OperationCondition>) params.get(Keys.Params_conditions);
 		
 		String newPath = (String) params.get(Keys.Params_newPath);
 		Boolean overwriteExisting = (Boolean) params.get(Keys.Params_overwriteExisting);
 		Boolean createDirs = (Boolean) params.get(Keys.Params_createDirs);
-		ArrayList<File> files = FileLoader.loadFolders(targetWorkspace, isRegex, ignoreCase, onlyProjects, withPath, Util.splitFilenames(fileNames));
-		FileOperator fileOp = FileOperatorFactory.getFileOperatorCopyFolder(files, conditions, newPath, overwriteExisting, createDirs);
+		FileOperator fileOp = null;
+		if(concernsAll){
+			ArrayList<File> files = FileLoader.loadFiles(Util.splitFilenames(fileNames));
+			fileOp = FileOperatorFactory.getFileOperatorCopyAbsoluteFile(files, conditions, targetWorkspace, newPath, overwriteExisting, createDirs, onlyProjects);
+		} else{
+			ArrayList<File> files = FileLoader.loadFolders(targetWorkspace, isRegex, ignoreCase, onlyProjects, withPath, Util.splitFilenames(fileNames));
+			fileOp = FileOperatorFactory.getFileOperatorCopyFile(files, conditions, newPath, overwriteExisting, createDirs);
+		}
 		fileOp.start();
 	}
 	
@@ -289,7 +303,7 @@ public class Logic {
 		Boolean overwriteExisting = (Boolean) params.get(Keys.Params_overwriteExisting);
 		Boolean createDirs = (Boolean) params.get(Keys.Params_createDirs);
 		ArrayList<File> files = FileLoader.loadFolders(targetWorkspace, isRegex, ignoreCase, onlyProjects, withPath, Util.splitFilenames(fileNames));
-		FileOperator fileOp = FileOperatorFactory.getFileOperatorMoveFolders(files, conditions, newPath, overwriteExisting, createDirs);
+		FileOperator fileOp = FileOperatorFactory.getFileOperatorMoveFiles(files, conditions, newPath, overwriteExisting, createDirs);
 		fileOp.start();
 	}
 	
@@ -339,7 +353,7 @@ public class Logic {
 		ArrayList<OperationCondition> conditions = (ArrayList<OperationCondition>) params.get(Keys.Params_conditions);
 		
 		ArrayList<File> files = FileLoader.loadFolders(targetWorkspace, isRegex, ignoreCase, onlyProjects, withPath, Util.splitFilenames(fileNames));
-		FileOperator fileOp = FileOperatorFactory.getFileOperatorDeleteFolders(files, conditions);
+		FileOperator fileOp = FileOperatorFactory.getFileOperatorDeleteFiles(files, conditions);
 		fileOp.start();
 	}
 	
@@ -420,18 +434,18 @@ public class Logic {
 		}
 		
 		ArrayList<File> list = fileLoader.loadFoldersRecursive(filenames, isRegex, ignoreCase, onlyProjects, withPath);
-		String logMsg = "\r\n" + "Gefundene Ordner:";
+		Log.log("\r\n" + "Gefundene Ordner für " + fileName + ":", Log.Level.INFO);
 		outerLoop : for(File file : list){
 			if(conditions != null){
 				for(OperationCondition con : conditions){
 					if(!con.isMet(file)){
-						logMsg += "\r\n" + "Bedingung " + con.toString(file) + " nicht erfüllt in " + file.getAbsolutePath();
+						Log.log("\r\n" + "Bedingung " + con.toString(file) + " nicht erfüllt in " + file.getAbsolutePath(), Log.Level.INFO);
 						continue outerLoop;
 					}
 				}
 			}
-			logMsg += "\t\r\n" + file.getAbsolutePath();
+			Log.log("\t" + file.getAbsolutePath(), Log.Level.DEBUG);
+			Log.writeToConsole("\t" + file.getAbsolutePath());
 		}
-		Log.log(logMsg, Log.Level.INFO);
 	}
 }

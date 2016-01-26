@@ -122,6 +122,9 @@ public class Start extends Application{
 		taDateiname.setPrefWidth(200);
 		taDateiname.setTooltip(TooltipFactory.getDateinameTooltip());
 		leftLayout.add(taDateiname, 1, row);
+		CheckBox cbConcernsAll = new CheckBox("Bezug auf alle");
+		cbConcernsAll.setId(Ids.main_cbConcernsAll);
+		leftLayout.add(GuiUtil.getWrappedInPane(cbConcernsAll), 2, row);
 		row++;
 		
 		//Dateiname Settings

@@ -5,6 +5,8 @@ import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileReader;
 import java.io.FileWriter;
+import java.io.PrintWriter;
+import java.io.StringWriter;
 import java.util.ArrayList;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -359,5 +361,23 @@ public class Util {
 	
 	public static boolean isNullOrEmpty(String s){
 		return s == null || s.isEmpty();
+	}
+	
+	public static boolean containsEqualNames(ArrayList<File> files){
+		for(File master : files){
+			for(File slave : files){
+				if(master.getName().equals(slave.getName()) && master != slave){
+					return true;
+				}
+			}
+		}
+		return false;
+	}
+	
+	public static String getStackTraceAsString(Exception e){
+		StringWriter stringwriter = new StringWriter();
+		PrintWriter printwriter = new PrintWriter(stringwriter);
+		e.printStackTrace(printwriter);
+		return stringwriter.toString();
 	}
 }

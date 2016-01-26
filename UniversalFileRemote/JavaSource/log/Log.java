@@ -1,12 +1,10 @@
 package log;
 
-import java.io.PrintWriter;
-import java.io.StringWriter;
-
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
 import javafx.scene.control.TextArea;
+import util.Util;
 
 public class Log {
 	public enum Level{
@@ -53,7 +51,8 @@ public class Log {
 		Log.log(e, Level.ERROR);
 	}
 	
-	public static void log(Exception msg, Level level){
+	public static void log(Exception e, Level level){
+		String msg = Util.getStackTraceAsString(e);
 		logToGuiAusgabe(msg, level);
 		switch(level){
 			case TRACE:
@@ -90,7 +89,7 @@ public class Log {
 	
 	public static void writeToConsole(String msg){
 		synchronized(guiAusgabe){
-			guiAusgabe.appendText(msg + "\r\n");
+			guiAusgabe.appendText("\r\n" + msg);
 		}
 	}
 	
@@ -106,9 +105,6 @@ public class Log {
 		if(level == Level.DEBUG || level == Level.TRACE){
 			return;
 		}
-		StringWriter stringwriter = new StringWriter();
-		PrintWriter printwriter = new PrintWriter(stringwriter);
-		msg.printStackTrace(printwriter);
-		logToGuiAusgabe(stringwriter.toString(), level);
+		logToGuiAusgabe(Util.getStackTraceAsString(msg), level);
 	}
 }

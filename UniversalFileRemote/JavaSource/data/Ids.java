@@ -9,6 +9,7 @@ public class Ids {
 	public static final String main_cbDateinameMitPfad = "dateinamePath";
 	public static final String main_comboOperation = "operations";
 	public static final String main_cbNurProjekte = "onlyProjects";
+	public static final String main_cbConcernsAll = "concernsAll";
 	public static final String main_paneParameter = "parameterPane";
 	public static final String main_paneCondition = "conditionPane";
 	public static final String main_btnStart = "start";

@@ -38,19 +38,6 @@ public class FileOperatorFactory {
 		return fileOp;
 	}
 	
-	public static FileOperator getFileOperatorBasicRenameFolders(ArrayList<File> files, ArrayList<OperationCondition> conditions, String newName){
-		Operation operation = new Operation(Type.renameFolder);
-		Util.setConditionsLink(operation, conditions);
-		{
-			HashMap<String, Object> operationData = new HashMap<>();
-			operationData.put(Keys.Params_newName, newName);
-			operationData.put(Keys.Params_conditions, conditions);
-			operation.setOperationData(operationData);
-		}
-		FileOperator fileOp = new FileOperator(files, operation);
-		return fileOp;
-	}
-	
 	public static FileOperator getFileOperatorBasicAdd(ArrayList<File> files, ArrayList<OperationCondition> conditions, String addString){
 		Operation operation = new Operation(Type.add);
 		Util.setConditionsLink(operation, conditions);
@@ -66,21 +53,6 @@ public class FileOperatorFactory {
 	
 	public static FileOperator getFileOperatorCopyFile(ArrayList<File> files, ArrayList<OperationCondition> conditions, String newName, Boolean overwriteExisting, Boolean createDirs){
 		Operation operation = new Operation(Type.copyFile);
-		Util.setConditionsLink(operation, conditions);
-		{
-			HashMap<String, Object> operationData = new HashMap<>();
-			operationData.put(Keys.Params_newPath, newName);
-			operationData.put(Keys.Params_overwriteExisting, overwriteExisting);
-			operationData.put(Keys.Params_createDirs, createDirs);
-			operationData.put(Keys.Params_conditions, conditions);
-			operation.setOperationData(operationData);
-		}
-		FileOperator fileOp = new FileOperator(files, operation);
-		return fileOp;
-	}
-	
-	public static FileOperator getFileOperatorCopyFolder(ArrayList<File> files, ArrayList<OperationCondition> conditions, String newName, Boolean overwriteExisting, Boolean createDirs){
-		Operation operation = new Operation(Type.copyFolder);
 		Util.setConditionsLink(operation, conditions);
 		{
 			HashMap<String, Object> operationData = new HashMap<>();
@@ -125,21 +97,6 @@ public class FileOperatorFactory {
 		return fileOp;
 	}
 	
-	public static FileOperator getFileOperatorMoveFolders(ArrayList<File> files, ArrayList<OperationCondition> conditions, String newPath, Boolean overwriteExisting, Boolean createDirs){
-		Operation operation = new Operation(Type.moveFolder);
-		Util.setConditionsLink(operation, conditions);
-		{
-			HashMap<String, Object> operationData = new HashMap<>();
-			operationData.put(Keys.Params_newPath, newPath);
-			operationData.put(Keys.Params_overwriteExisting, overwriteExisting);
-			operationData.put(Keys.Params_createDirs, createDirs);
-			operationData.put(Keys.Params_conditions, conditions);
-			operation.setOperationData(operationData);
-		}
-		FileOperator fileOp = new FileOperator(files, operation);
-		return fileOp;
-	}
-	
 	public static FileOperator getFileOperatorDeleteFiles(ArrayList<File> files, ArrayList<OperationCondition> conditions){
 		Operation operation = new Operation(Type.deleteFile);
 		Util.setConditionsLink(operation, conditions);
@@ -152,12 +109,19 @@ public class FileOperatorFactory {
 		return fileOp;
 	}
 	
-	public static FileOperator getFileOperatorDeleteFolders(ArrayList<File> files, ArrayList<OperationCondition> conditions){
-		Operation operation = new Operation(Type.deleteFolder);
+	public static FileOperator getFileOperatorCopyAbsoluteFile(ArrayList<File> files,
+			ArrayList<OperationCondition> conditions, String targetWorkspace, String newPath, Boolean overwriteExisting,
+			Boolean createDirs, Boolean onlyProjects) {
+		Operation operation = new Operation(Type.copyAbsoluteFile);
 		Util.setConditionsLink(operation, conditions);
 		{
 			HashMap<String, Object> operationData = new HashMap<>();
 			operationData.put(Keys.Params_conditions, conditions);
+			operationData.put(Keys.Params_targetWorkspace, targetWorkspace);
+			operationData.put(Keys.Params_newPath, newPath);
+			operationData.put(Keys.Params_onlyProjects, onlyProjects);
+			operationData.put(Keys.Params_overwriteExisting, overwriteExisting);
+			operationData.put(Keys.Params_createDirs, createDirs);
 			operation.setOperationData(operationData);
 		}
 		FileOperator fileOp = new FileOperator(files, operation);

@@ -18,6 +18,7 @@ public class Keys {
 	public static final String Params_withPath = "withPath";
 	public static final String Params_onlyProjects = "onlyProjects";
 	public static final String Params_conditions = "conditions";
+	public static final String Params_concernsAll = "concernsAll";
 	
 	//optionale Parameter (je nach Operation)
 	public static final String Params_insertString = "insertString";

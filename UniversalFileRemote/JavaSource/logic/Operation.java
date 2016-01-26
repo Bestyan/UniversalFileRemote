@@ -7,6 +7,8 @@ import java.nio.file.StandardCopyOption;
 import java.util.ArrayList;
 import java.util.HashMap;
 
+import org.apache.commons.io.FileUtils;
+
 import data.Keys;
 import log.Log;
 import util.Util;
@@ -14,7 +16,7 @@ import util.Util;
 @SuppressWarnings("unchecked")
 public class Operation {
 	public enum Type{
-		insert, add, replace, deleteFile, renameFile, moveFile, copyFile, deleteFolder, renameFolder, moveFolder, copyFolder;
+		insert, add, replace, deleteFile, renameFile, moveFile, copyFile, copyAbsoluteFile;
 	}
 
 	public Operation(Type type){
@@ -156,20 +158,10 @@ public class Operation {
 			case copyFile:
 				this.copyFile(f);
 				break;
-			case deleteFolder:
-				this.deleteFile(f);
-				break;
-			case renameFolder:
-				this.renameFile(f);
-				break;
-			case moveFolder:
-				this.moveFile(f);
-				break;
-			case copyFolder:
-				this.copyFile(f);
+			case copyAbsoluteFile:
+				this.copyAbsoluteFile(f);
 				break;
 			default:
-
 		}
 	}
 
@@ -198,8 +190,12 @@ public class Operation {
 	}
 
 	protected void deleteFile(File file){
-		file.delete();
-		Log.log("Datei/Ordner gelöscht: " + file.getAbsolutePath(), Log.Level.INFO);
+		try {
+			FileUtils.deleteDirectory(file);
+			Log.log("Datei/Ordner gelöscht: " + file.getAbsolutePath(), Log.Level.INFO);
+		} catch (IOException e) {
+			Log.log(e);
+		}
 	}
 	
 	/**
@@ -239,7 +235,7 @@ public class Operation {
 		try {
 			File output = new File(file.getParent() + "\\" + newName);
 			if(output.exists()){
-				Log.log("Datei/Ordner existiert bereits: " + file.getAbsolutePath(), Log.Level.ERROR);
+				Log.log("Datei/Ordner existiert bereits: " + file.getAbsolutePath(), Log.Level.INFO);
 				return;
 			}
 			Files.move(file.toPath(), output.toPath(), StandardCopyOption.ATOMIC_MOVE);
@@ -278,13 +274,13 @@ public class Operation {
 	protected boolean checkSurroundings(File output, Boolean createDirs) {
 		boolean valid = true;
 		if(output.exists()){
-			Log.log("Datei/Ordner existiert bereits: " + output.getAbsolutePath(), Log.Level.ERROR);
+			Log.log("Datei/Ordner existiert bereits: " + output.getAbsolutePath(), Log.Level.INFO);
 			valid = false;
 		}
 		if(createDirs){
 			output.getParentFile().mkdirs();
 		} else if(!output.getParentFile().exists()){
-			Log.log("Übergeordnetes Verzeichnis fehlt: " + output.getParentFile().getAbsolutePath(), Log.Level.ERROR);
+			Log.log("Übergeordnetes Verzeichnis fehlt: " + output.getParentFile().getAbsolutePath(), Log.Level.INFO);
 			valid = false;
 		}
 		return valid;
@@ -294,12 +290,14 @@ public class Operation {
 		String newPath = (String) this.getOperationData().get(Keys.Params_newPath);
 		Boolean overwriteExisting = (Boolean) this.getOperationData().get(Keys.Params_overwriteExisting);
 		Boolean createDirs = (Boolean) this.getOperationData().get(Keys.Params_createDirs);
-
-
+		
 		String targetPath = "";
 		try {
 			targetPath = Util.replacePlaceholders(newPath, file);
 			File output = new File(targetPath);
+			if(createDirs){
+				output.getParentFile().mkdirs();
+			}
 			if(overwriteExisting){
 				Files.copy(file.toPath(), output.toPath(), StandardCopyOption.REPLACE_EXISTING);
 			} else{
@@ -312,8 +310,61 @@ public class Operation {
 				Log.log("Kopieren: " + file.getAbsolutePath() + " nach " + targetPath, Log.Level.INFO);
 			}
 		} catch (IOException e) {
-			Log.log("Kopieren: " + file.getAbsolutePath() + " nach " + targetPath + " fehlgeschlagen", Log.Level.ERROR);
+			Log.log("Kopieren fehlgeschlagen: " + file.getAbsolutePath() + " nach " + targetPath, Log.Level.ERROR);
 			Log.log(e);
+		}
+	}
+	
+	protected void copyAbsoluteFile(File file){
+		String newPath = (String) this.getOperationData().get(Keys.Params_newPath);
+		String targetWorkspace = (String) this.getOperationData().get(Keys.Params_targetWorkspace);
+		Boolean overwriteExisting = (Boolean) this.getOperationData().get(Keys.Params_overwriteExisting);
+		Boolean createDirs = (Boolean) this.getOperationData().get(Keys.Params_createDirs);
+		Boolean onlyProjects = (Boolean) this.getOperationData().get(Keys.Params_onlyProjects);
+		
+		String targetPath = "";
+		File root = new File(targetWorkspace);
+		for(File subdir : root.listFiles()){
+			try {
+				if(onlyProjects && !subdir.getName().startsWith("com.athos.")){ //onlyProjects
+					continue;
+				}
+				if(!newPath.contains("<project>")){ //<project> Platzhalter ist bei bezug auf alle pflicht
+					break;
+				}
+
+				targetPath = newPath.replace("<project>", subdir.getAbsolutePath());
+				targetPath = targetPath + (targetPath.endsWith("\\") ? "" : "\\") + file.getName();
+				
+				File output = new File(targetPath);
+				if(createDirs){ //evtl fehlende Verzeichnisse erstellen
+					output.getParentFile().mkdirs();
+				}
+				if(overwriteExisting){
+					if(output.getParentFile().exists()){
+						if(file.isDirectory()){
+							FileUtils.copyDirectory(file, output);
+						} else{
+							Files.copy(file.toPath(), output.toPath(), StandardCopyOption.REPLACE_EXISTING);
+						}
+					}
+				} else{
+					if(!this.checkSurroundings(output, createDirs)){
+						continue;
+					}
+					if(file.isDirectory()){
+						FileUtils.copyDirectory(file, output);
+					} else{
+						Files.copy(file.toPath(), output.toPath());
+					}
+				}
+				if(output.exists()){
+					Log.log("Kopieren: " + file.getAbsolutePath() + " nach " + targetPath, Log.Level.INFO);
+				}
+			} catch (IOException e) {
+				Log.log("Kopieren fehlgeschlagen: " + file.getAbsolutePath() + " nach " + targetPath, Log.Level.ERROR);
+				Log.log(e);
+			}
 		}
 	}
 }

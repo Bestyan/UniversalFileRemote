@@ -70,6 +70,7 @@ public class Validator {
 		Boolean ignoreCase = (Boolean) params.get(Keys.Params_ignoreCase);
 		Boolean onlyProjects = (Boolean) params.get(Keys.Params_onlyProjects);
 		Boolean withPath = (Boolean) params.get(Keys.Params_withPath);
+		Boolean absolute = (Boolean) params.get(Keys.Params_concernsAll);
 		//conditions muss nicht geprüft werden wg validateOperationCondition
 		if(targetWorkspace == null || targetWorkspace.length() == 0){
 			valid = false;
@@ -87,6 +88,9 @@ public class Validator {
 			valid = false;
 		}
 		if(onlyProjects == null){
+			valid = false;
+		}
+		if(absolute == null){
 			valid = false;
 		}
 		return valid;

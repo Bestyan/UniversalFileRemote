@@ -216,6 +216,7 @@ public class GuiUtil {
 		Boolean ignoreCase = new Boolean(GuiUtil.lookupCheckBox(scene, "#" + Ids.main_cbDateinameIgnoreCase).isSelected());
 		Boolean withPath = new Boolean(GuiUtil.lookupCheckBox(scene, "#" + Ids.main_cbDateinameMitPfad).isSelected());
 		Boolean onlyProjects = new Boolean(GuiUtil.lookupCheckBox(scene, "#" + Ids.main_cbNurProjekte).isSelected());
+		Boolean absoluteFile = new Boolean(GuiUtil.lookupCheckBox(scene, "#" + Ids.main_cbConcernsAll).isSelected());
 		
 		Pane conditionsPane = (Pane) scene.lookup("#" + Ids.main_paneCondition);
 		ArrayList<OperationCondition> conditions = new ArrayList<>();
@@ -232,6 +233,7 @@ public class GuiUtil {
 		result.put(Keys.Params_withPath, withPath);
 		result.put(Keys.Params_onlyProjects, onlyProjects);
 		result.put(Keys.Params_conditions, conditions);
+		result.put(Keys.Params_concernsAll, absoluteFile);
 		return result;
 	}
 	

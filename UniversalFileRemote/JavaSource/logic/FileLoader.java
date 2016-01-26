@@ -357,19 +357,11 @@ public class FileLoader {
 		return new File(fullPath);
 	}
 	
-//	/**
-//	 * gibt nur StartPages aus dem StartPages-Ordner zurück
-//	 * @return
-//	 */
-//	public static ArrayList<File> loadStartPagesFiles(String rootDir, boolean isRegex, String fileName){
-//		fileName = fileName.toLowerCase();
-//		ArrayList<File> allFiles = FileLoader.loadFiles(rootDir, isRegex, true, fileName);
-//		ArrayList<File> files = new ArrayList<>();
-//		for(File file : allFiles){
-//			if(file.getParentFile().getName().equals("StartPages")){
-//				files.add(file);
-//			}
-//		}
-//		return files;
-//	}
+	public static ArrayList<File> loadFiles(ArrayList<String> paths){
+		ArrayList<File> result = new ArrayList<>();
+		for(String path : paths){
+			result.add(new File(path));
+		}
+		return result;
+	}
 }
