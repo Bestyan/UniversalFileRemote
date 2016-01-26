@@ -242,7 +242,11 @@ public class Operation {
 				Log.log("Datei/Ordner existiert bereits: " + file.getAbsolutePath(), Log.Level.INFO);
 				return;
 			}
-			FileUtils.moveFile(file, output);
+			if(file.isDirectory()){
+				FileUtils.moveDirectory(file, output);
+			} else{
+				FileUtils.moveFile(file, output);
+			}
 			Log.log("Umbenennen: " + file.getAbsolutePath() + " nach " + output.getAbsolutePath(), Log.Level.INFO);
 		} catch (IOException e) {
 			Log.log(e);
