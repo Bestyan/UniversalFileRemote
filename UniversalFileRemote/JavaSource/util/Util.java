@@ -236,7 +236,7 @@ public class Util {
 			parent = newParent.getAbsolutePath();
 		}
 		if(newPath.contains("<project>")){
-			project = getProjectName(file);
+			project = getProjectDirectory(file);
 		}
 		String result = newPath.replace("<project>", project + "\\");
 		result = result.replaceAll("<parent[0-9]*>", Matcher.quoteReplacement(parent));

@@ -15,6 +15,7 @@ public class Ids {
 	public static final String main_btnStart = "start";
 	public static final String main_taLog = "log";
 	public static final String main_tfLogEingabe = "logEingabe";
+	public static final String main_btnAddCondition = "addCondition";
 	
 	//parameter Maske
 	public static final String parameter_taAddString = "addString";

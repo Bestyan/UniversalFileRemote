@@ -388,19 +388,19 @@ public class Logic {
 		}
 		
 		ArrayList<File> list = fileLoader.loadFilesRecursive(filenames, isRegex, ignoreCase, onlyProjects, withPath);
-		String logMsg = "\r\n" + "Gefundene Dateien:";
+		Log.log("\r\n" + "Gefundene Dateien für " + fileName + ":", Log.Level.INFO);
 		outerLoop : for(File file : list){
 			if(conditions != null){
 				for(OperationCondition con : conditions){
 					if(!con.isMet(file)){
-						logMsg += "\r\n" + "Bedingung " + con.toString(file) + " nicht erfüllt in " + file.getAbsolutePath();
+						Log.log("Bedingung " + con.toString(file) + " nicht erfüllt in " + file.getAbsolutePath(), Log.Level.INFO);
 						continue outerLoop;
 					}
 				}
 			}
-			logMsg += "\t\r\n" + file.getAbsolutePath();
+			Log.log(file.getAbsolutePath(), Log.Level.DEBUG);
+			Log.writeToConsole(file.getAbsolutePath());
 		}
-		Log.log(logMsg, Log.Level.INFO);
 	}
 	
 	/**
@@ -439,13 +439,13 @@ public class Logic {
 			if(conditions != null){
 				for(OperationCondition con : conditions){
 					if(!con.isMet(file)){
-						Log.log("\r\n" + "Bedingung " + con.toString(file) + " nicht erfüllt in " + file.getAbsolutePath(), Log.Level.INFO);
+						Log.log("Bedingung " + con.toString(file) + " nicht erfüllt in " + file.getAbsolutePath(), Log.Level.INFO);
 						continue outerLoop;
 					}
 				}
 			}
-			Log.log("\t" + file.getAbsolutePath(), Log.Level.DEBUG);
-			Log.writeToConsole("\t" + file.getAbsolutePath());
+			Log.log(file.getAbsolutePath(), Log.Level.DEBUG);
+			Log.writeToConsole(file.getAbsolutePath());
 		}
 	}
 }

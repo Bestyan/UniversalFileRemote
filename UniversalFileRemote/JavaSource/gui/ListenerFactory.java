@@ -49,4 +49,17 @@ public class ListenerFactory {
 			}
 		};
 	}
+	
+	public static ChangeListener<Boolean> getConcernsAllEnabledChangeListener(Pane layout){
+		return new ChangeListener<Boolean>(){
+			@Override
+			public void changed(ObservableValue<? extends Boolean> observable, Boolean oldValue, Boolean newValue) {
+				((Button) layout.lookup("#" + Ids.main_btnAddCondition)).setDisable(newValue);
+				if(newValue){
+					Pane conditions = (Pane)layout.lookup("#" + Ids.main_paneCondition);
+					conditions.getChildren().removeAll(conditions.getChildren());
+				}
+			}
+		};
+	}
 }

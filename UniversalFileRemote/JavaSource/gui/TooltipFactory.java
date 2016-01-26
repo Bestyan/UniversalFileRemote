@@ -71,4 +71,12 @@ public class TooltipFactory {
 		tooltip.setWrapText(true);
 		return tooltip;
 	}
+	
+	public static Tooltip getConcernsAllToolTip(){
+		Tooltip tooltip = new Tooltip("Ist diese Option ausgewählt, werden die Dateinamen absolut interpretiert. Dies dient dazu, eine/n Datei/Ordner in alle Projekte zu kopieren. "
+				+ "Im Feld für 'Neuer Name' muss hierbei der <project>-Platzhalter verwendet werden. Kann nur mit Datei/Ordner kopieren verwendet werden. Nicht kompatibel mit Regex/Ignore Case/mit Pfad.");
+		tooltip.setPrefWidth(200);
+		tooltip.setWrapText(true);
+		return tooltip;
+	}
 }

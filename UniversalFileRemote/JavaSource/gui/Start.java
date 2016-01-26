@@ -124,6 +124,8 @@ public class Start extends Application{
 		leftLayout.add(taDateiname, 1, row);
 		CheckBox cbConcernsAll = new CheckBox("Bezug auf alle");
 		cbConcernsAll.setId(Ids.main_cbConcernsAll);
+		cbConcernsAll.selectedProperty().addListener(ListenerFactory.getConcernsAllEnabledChangeListener(leftLayout));
+		cbConcernsAll.setTooltip(TooltipFactory.getConcernsAllToolTip());
 		leftLayout.add(GuiUtil.getWrappedInPane(cbConcernsAll), 2, row);
 		row++;
 		
@@ -196,6 +198,7 @@ public class Start extends Application{
 		Button btnAddCondition = new Button("Bedingung hinzufügen");
 		btnAddCondition.setOnAction(EventHandlerFactory.getAddConditionRowEventHandler(conditionBox));
 		btnAddCondition.setPrefWidth(195);
+		btnAddCondition.setId(Ids.main_btnAddCondition);
 		HBox buttonbox = GuiUtil.getWrappedInHBox(btnStart, btnAddCondition);
 		buttonbox.setSpacing(10);
 		buttonbox.setPrefWidth(400);
