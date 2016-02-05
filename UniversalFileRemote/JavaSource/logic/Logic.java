@@ -39,13 +39,14 @@ public class Logic {
 		Boolean ignoreCase = (Boolean) params.get(Keys.Params_ignoreCase);
 		Boolean withPath = (Boolean) params.get(Keys.Params_withPath);
 		Boolean onlyProjects = (Boolean) params.get(Keys.Params_onlyProjects);
+		Boolean isReplacementGroup = (Boolean) params.get(Keys.Params_replacementGroup);
 		ArrayList<OperationCondition> conditions = (ArrayList<OperationCondition>) params.get(Keys.Params_conditions);
 		
 		String target = (String) params.get(Keys.Params_target);
 		String replacement = (String) params.get(Keys.Params_replacement);
 		Boolean replaceRegex = (Boolean) params.get(Keys.Params_replaceRegex);
 		ArrayList<File> files = FileLoader.loadFiles(targetWorkspace, isRegex, ignoreCase, onlyProjects, withPath, Util.splitFilenames(fileNames));
-		FileOperator fileOp = FileOperatorFactory.getFileOperatorBasicReplace(files, conditions, target, replacement, replaceRegex);
+		FileOperator fileOp = FileOperatorFactory.getFileOperatorBasicReplace(files, conditions, target, replacement, replaceRegex, isReplacementGroup);
 		fileOp.start();
 	}
 	
@@ -233,13 +234,14 @@ public class Logic {
 		Boolean ignoreCase = (Boolean) params.get(Keys.Params_ignoreCase);
 		Boolean withPath = (Boolean) params.get(Keys.Params_withPath);
 		Boolean onlyProjects = (Boolean) params.get(Keys.Params_onlyProjects);
+		Boolean isReplacementGroup = (Boolean) params.get(Keys.Params_replacementGroup);
 		ArrayList<OperationCondition> conditions = (ArrayList<OperationCondition>) params.get(Keys.Params_conditions);
 		
 		String target = (String) params.get(Keys.Params_target);
 		String insertString = (String) params.get(Keys.Params_insertString);
 		String positionCondition = (String) params.get(Keys.Params_positionCondition);
 		ArrayList<File> files = FileLoader.loadFiles(targetWorkspace, isRegex, ignoreCase, onlyProjects, withPath, Util.splitFilenames(fileNames));
-		FileOperator fileOp = FileOperatorFactory.getFileOperatorConditionalInsert(files, conditions, insertString, target, Util.getType(positionCondition));
+		FileOperator fileOp = FileOperatorFactory.getFileOperatorConditionalInsert(files, conditions, insertString, target, Util.getType(positionCondition), isReplacementGroup);
 		fileOp.start();
 	}
 	

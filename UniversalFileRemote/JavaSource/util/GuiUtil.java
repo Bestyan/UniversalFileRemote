@@ -251,24 +251,32 @@ public class GuiUtil {
 				break;
 			}
 			case Keys.Operation_einfuegen: {
+				Boolean replacementGroup = new Boolean(GuiUtil.lookupCheckBox(layout, "#" + Ids.parameter_cbEinfuegenMatcher).isSelected());
 				String insertString = GuiUtil.lookupTextArea(layout, "#" + Ids.parameter_taInsertString).getText();
-				insertString = insertString.replaceAll("(?!\\r)\\n", "\r\n");
+				if(!replacementGroup){
+					insertString = insertString.replaceAll("(?!\\r)\\n", "\r\n");
+				}
 				String positionCondition = (String) GuiUtil.lookupComboBox(layout, "#" + Ids.parameter_comboPositionEinfuegen).getValue();
 				String target = GuiUtil.lookupTextField(layout, "#" + Ids.parameter_tfPositionZielWert).getText();
 				params.put(Keys.Params_insertString, insertString);
 				params.put(Keys.Params_positionCondition, positionCondition);
 				params.put(Keys.Params_target, target);
+				params.put(Keys.Params_replacementGroup, replacementGroup);
 				break;
 			}
 			case Keys.Operation_ersetzen: {
+				Boolean replacementGroup = new Boolean(GuiUtil.lookupCheckBox(layout, "#" + Ids.parameter_cbErsetzenMatcher).isSelected());
 				String replacement = GuiUtil.lookupTextArea(layout, "#" + Ids.parameter_taErsetzText).getText();
-				replacement = replacement.replaceAll("(?!\\r)\\n", "\r\n");
+				if(!replacementGroup){
+					replacement = replacement.replaceAll("(?!\\r)\\n", "\r\n");
+				}
 				String target = GuiUtil.lookupTextArea(layout, "#" + Ids.parameter_taErsetzZielText).getText();
 				target = target.replaceAll("(?!\\r)\\n", "\r\n");
 				Boolean replaceRegex = new Boolean(GuiUtil.lookupCheckBox(layout, "#" + Ids.parameter_cbErsetzenRegex).isSelected());
 				params.put(Keys.Params_replacement, replacement);
 				params.put(Keys.Params_target, target);
 				params.put(Keys.Params_replaceRegex, replaceRegex);
+				params.put(Keys.Params_replacementGroup, replacementGroup);
 				break;
 			}
 			case Keys.Operation_dateiLoeschen:

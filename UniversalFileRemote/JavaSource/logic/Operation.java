@@ -6,6 +6,8 @@ import java.nio.file.Files;
 import java.nio.file.StandardCopyOption;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import org.apache.commons.io.FileUtils;
 
@@ -173,11 +175,28 @@ public class Operation {
 		String target = (String) this.getOperationData().get(Keys.Params_target);
 		String replacement = (String) this.getOperationData().get(Keys.Params_replacement);
 		Boolean isRegex = (Boolean) this.getOperationData().get(Keys.Params_isRegex);
+		Boolean isReplacementGroup = (Boolean) this.getOperationData().get(Keys.Params_replacementGroup);
 		String fileText = Util.readFile(file);
 
+		if(isReplacementGroup){
+			try{
+				Pattern pattern = Pattern.compile(replacement);
+				Matcher matcher = pattern.matcher(fileText);
+				if(matcher.find()){
+					replacement = matcher.group(1);
+				} else{
+					Log.log("Kein match gefunden in " + file.getAbsolutePath(), Log.Level.INFO);
+					return;
+				}
+			} catch(Exception e){
+				Log.log("Regex ist ungültig", Log.Level.INFO);
+				return;
+			}
+		}
+		
 		String result;
 		if(isRegex == null || isRegex.booleanValue()){
-			result = fileText.replaceAll(target, replacement);
+			result = fileText.replaceAll(target, Matcher.quoteReplacement(replacement));
 		} else{
 			result = fileText.replace(target, replacement);
 		}
@@ -209,11 +228,28 @@ public class Operation {
 	protected void insert(File file){
 		InsertPosition condition = (InsertPosition) this.getOperationData().get(Keys.Params_condition);
 		String insertString = (String) this.getOperationData().get(Keys.Params_insertString);
+		Boolean isReplacementGroup = (Boolean) this.getOperationData().get(Keys.Params_replacementGroup);
+		String fileText = Util.readFile(file);
+		
+		if(isReplacementGroup){
+			try{
+				Pattern pattern = Pattern.compile(insertString);
+				Matcher matcher = pattern.matcher(fileText);
+				if(!matcher.find()){
+					Log.log("Kein match gefunden in " + file.getAbsolutePath(), Log.Level.INFO);
+					return;
+				} else{
+					insertString = matcher.group(1);
+				}
+			} catch(Exception e){
+				Log.log("Regex ist ungültig", Log.Level.INFO);
+				return;
+			}
+		}
 
 		if(condition != null){
-			condition.insert(file);
+			condition.insert(file, insertString);
 		} else{
-			String fileText = Util.readFile(file);
 			fileText = insertString + fileText;
 			Util.writeFile(file, fileText);
 		}

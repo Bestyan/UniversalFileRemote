@@ -39,8 +39,7 @@ public class InsertPosition {
 	/**
 	 * @param file
 	 */
-	public void insert(File file){
-		String insertString = (String) this.getData("insertString");
+	public void insert(File file, String insertString){
 		String logMsg = "";
 		switch(this.getType()){
 			case insertBefore:

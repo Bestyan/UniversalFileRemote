@@ -173,35 +173,47 @@ public class EventHandlerFactory {
 		Label lbTargetString = new Label("Ersetzen durch");
 		parameterPane.add(GuiUtil.getWrappedInPane(lbTargetString), 0, 3);
 		
+		CheckBox cbMatcher = new CheckBox("group(0)");
+		cbMatcher.setId(Ids.parameter_cbErsetzenMatcher);
+		cbMatcher.setTooltip(TooltipFactory.getMatcherGroupTooltip());
+		parameterPane.add(cbMatcher, 0, 4);
+		
 		TextArea taTargetString = new TextArea();
 		taTargetString.setPrefRowCount(4);
 		taTargetString.setPrefWidth(250);
 		taTargetString.setId(Ids.parameter_taErsetzText);
 		taTargetString.textProperty().addListener(ListenerFactory.getStartOperationValidatorChangeListener(layout));
-		parameterPane.add(GuiUtil.getWrappedInPane(taTargetString), 1, 3, 2, 1);
+		parameterPane.add(GuiUtil.getWrappedInPane(taTargetString), 1, 3, 2, 3);
 	}
 	
 	protected static void setParametersForInsert(GridPane parameterPane, Pane layout) {
+		int row = 0;
 		Label lbAddString = new Label("Eingefügt wird");
-		parameterPane.add(GuiUtil.getWrappedInPane(lbAddString), 0, 0);
+		parameterPane.add(GuiUtil.getWrappedInPane(lbAddString), 0, row);
+		
+		CheckBox cbMatcherGroup = new CheckBox("group(0)");
+		cbMatcherGroup.setId(Ids.parameter_cbEinfuegenMatcher);
+		cbMatcherGroup.setTooltip(TooltipFactory.getMatcherGroupTooltip());
+		parameterPane.add(cbMatcherGroup, 0, row + 1);
 		
 		TextArea taAddString = new TextArea();
 		taAddString.setPrefRowCount(4);
 		taAddString.setPrefWidth(250);
 		taAddString.setId(Ids.parameter_taInsertString);
 		taAddString.textProperty().addListener(ListenerFactory.getStartOperationValidatorChangeListener(layout));
-		parameterPane.add(GuiUtil.getWrappedInPane(taAddString), 1, 0, 2, 1);
+		parameterPane.add(GuiUtil.getWrappedInPane(taAddString), 1, row, 2, 3);
+		row += 3;
 		
 		Label lbInsertPosition = new Label("Position");
-		parameterPane.add(lbInsertPosition, 0, 1);
+		parameterPane.add(lbInsertPosition, 0, row);
 		ComboBox<String> comboPosition = new ComboBox<>(FXCollections.observableArrayList("nach", "vor"));
 		comboPosition.setId(Ids.parameter_comboPositionEinfuegen);
 		comboPosition.getSelectionModel().selectedItemProperty().addListener(ListenerFactory.getStartOperationValidatorChangeListener(layout));
-		parameterPane.add(comboPosition, 1, 1);
+		parameterPane.add(comboPosition, 1, row);
 		TextField tfPosition = new TextField();
 		tfPosition.setId(Ids.parameter_tfPositionZielWert);
 		tfPosition.textProperty().addListener(ListenerFactory.getStartOperationValidatorChangeListener(layout));
-		parameterPane.add(tfPosition, 2, 1);
+		parameterPane.add(tfPosition, 2, row);
 	}
 	
 	protected static void setParametersForAdd(GridPane parameterPane, Pane layout) {

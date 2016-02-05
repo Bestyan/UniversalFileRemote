@@ -44,10 +44,14 @@ public class Validator {
 		String insertString = (String) params.get(Keys.Params_insertString);
 		String positionCondition = (String) params.get(Keys.Params_positionCondition);
 		String target = (String) params.get(Keys.Params_target);
+		Boolean replacementGroup = (Boolean) params.get(Keys.Params_replacementGroup);
 		if(insertString == null || insertString.length() == 0){
 			valid = false;
 		}
 		if(positionCondition == null){
+			valid = false;
+		}
+		if(replacementGroup == null){
 			valid = false;
 		}
 		if(target == null || target.length() == 0){
@@ -101,13 +105,14 @@ public class Validator {
 		String replacement = (String) params.get(Keys.Params_replacement);
 		String target = (String) params.get(Keys.Params_target);
 		Boolean replaceRegex = (Boolean) params.get(Keys.Params_replaceRegex);
+		Boolean replacementGroup = (Boolean) params.get(Keys.Params_replacementGroup);
 		if(replacement == null){
 			valid = false;
 		}
 		if(target == null || target.length() == 0){
 			valid = false;
 		}
-		if(replaceRegex == null){
+		if(replaceRegex == null || replacementGroup == null){
 			valid = false;
 		}
 		return valid;

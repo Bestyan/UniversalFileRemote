@@ -10,7 +10,7 @@ import util.Util;
 
 public class FileOperatorFactory {
 
-	public static FileOperator getFileOperatorBasicReplace(ArrayList<File> files, ArrayList<OperationCondition> conditions, String target, String replacement, boolean isRegex){
+	public static FileOperator getFileOperatorBasicReplace(ArrayList<File> files, ArrayList<OperationCondition> conditions, String target, String replacement, boolean isRegex, boolean isReplacementGroup){
 		Operation operation = new Operation(Type.replace);
 		Util.setConditionsLink(operation, conditions);
 		{
@@ -18,6 +18,7 @@ public class FileOperatorFactory {
 			operationData.put(Keys.Params_target, target);
 			operationData.put(Keys.Params_replacement, replacement);
 			operationData.put(Keys.Params_isRegex, new Boolean(isRegex));
+			operationData.put(Keys.Params_replacementGroup, new Boolean(isReplacementGroup));
 			operationData.put(Keys.Params_conditions, conditions);
 			operation.setOperationData(operationData);
 		}
@@ -66,7 +67,7 @@ public class FileOperatorFactory {
 		return fileOp;
 	}
 	
-	public static FileOperator getFileOperatorConditionalInsert(ArrayList<File> files, ArrayList<OperationCondition> conditions, String insertString, String target, InsertPosition.Type type){
+	public static FileOperator getFileOperatorConditionalInsert(ArrayList<File> files, ArrayList<OperationCondition> conditions, String insertString, String target, InsertPosition.Type type, boolean isReplacementGroup){
 		Operation operation = new Operation(Type.insert);
 		Util.setConditionsLink(operation, conditions);
 		InsertPosition condition = new InsertPosition(operation, type);
@@ -76,6 +77,7 @@ public class FileOperatorFactory {
 			operationData.put(Keys.Params_condition, condition);
 			operationData.put(Keys.Params_target, target);
 			operationData.put(Keys.Params_conditions, conditions);
+			operationData.put(Keys.Params_replacementGroup, new Boolean(isReplacementGroup));
 			operation.setOperationData(operationData);
 		}
 		FileOperator fileOp = new FileOperator(files, operation);

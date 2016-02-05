@@ -32,6 +32,7 @@ public class Keys {
 	public static final String Params_createDirs = "createDirs";
 	public static final String Params_addString = "addString";
 	public static final String Params_condition = "condition";
+	public static final String Params_replacementGroup = "replacementGroup";
 	
 	//combobox Operationen
 	public static final String Operation_anfuegen = "Anfügen";

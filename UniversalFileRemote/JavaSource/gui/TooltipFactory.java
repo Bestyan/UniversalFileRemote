@@ -79,4 +79,11 @@ public class TooltipFactory {
 		tooltip.setWrapText(true);
 		return tooltip;
 	}
+	
+	public static Tooltip getMatcherGroupTooltip(){
+		Tooltip tooltip = new Tooltip("Ist diese Option ausgewählt, wird der Inhalt des Feldes als Regex interpretiert und der Ersetzungstext aus Matcher.group(0) genommen.");
+		tooltip.setPrefWidth(200);
+		tooltip.setWrapText(true);
+		return tooltip;
+	}
 }

@@ -21,8 +21,10 @@ public class Ids {
 	public static final String parameter_taAddString = "addString";
 	public static final String parameter_taInsertString = "insertString";
 	public static final String parameter_comboPositionEinfuegen = "insertPositionCondition";
+	public static final String parameter_cbEinfuegenMatcher = "replacementMatcherGroup";
 	public static final String parameter_tfPositionZielWert = "insertPositionConditionValue";
 	public static final String parameter_cbErsetzenRegex = "replaceRegex";
+	public static final String parameter_cbErsetzenMatcher = "replacementMatcherGroup";
 	public static final String parameter_taErsetzZielText = "replaceTarget";
 	public static final String parameter_taErsetzText = "replacement";
 	public static final String parameter_tfNeuerDateiname = "fileNewName";
