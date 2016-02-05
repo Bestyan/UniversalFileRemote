@@ -20,7 +20,7 @@ public class OperationCondition {
 		thisFile, otherFile;
 	}
 	public enum ConditionType{
-		exists, contains, startsWith, endsWith;
+		exists, contains, startsWith, endsWith, liesIn;
 	}
 	
 	public static ArrayList<String> getOperationConditionFileTypeList(){
@@ -36,6 +36,7 @@ public class OperationCondition {
 		list.add(Keys.Condition_enthaelt);
 		list.add(Keys.Condition_beginntMit);
 		list.add(Keys.Condition_endetMit);
+		list.add(Keys.Condition_liegtIn);
 		return list;
 	}
 	
@@ -86,8 +87,8 @@ public class OperationCondition {
 		if(fileType == FileType.thisFile){
 			targetFile = file;
 		} else if(fileType == FileType.otherFile){
-			String newPath = (String) this.getFileText();
-			String actualPath = Util.replacePlaceholders(newPath, file);
+			String newPath = this.getFileText();
+			String actualPath = Util.replacePlaceholders(newPath, file, true);
 			targetFile = new File(actualPath);
 		} else{
 			Log.log("unmöglicher fileType Wert in OperationCondition.isMet", Log.Level.FATAL);
@@ -100,15 +101,19 @@ public class OperationCondition {
 				break;
 			}
 			case contains:{
-				isMet = Util.fileContains(file, this.getConditionText(), this.isTextRegex());
+				isMet = Util.fileContains(targetFile, this.getConditionText(), this.isTextRegex());
 				break;
 			}
 			case startsWith:{
-				isMet = Util.fileStartsWith(file, this.getConditionText(), this.isTextRegex());
+				isMet = Util.fileStartsWith(targetFile, this.getConditionText(), this.isTextRegex());
 				break;
 			}
 			case endsWith:{
-				isMet = Util.fileEndsWith(file, this.getConditionText(), this.isTextRegex());
+				isMet = Util.fileEndsWith(targetFile, this.getConditionText(), this.isTextRegex());
+				break;
+			}
+			case liesIn:{
+				isMet = Util.fileLiesIn(targetFile, this.getConditionText(), this.isTextRegex());
 				break;
 			}
 			default:{
@@ -186,7 +191,7 @@ public class OperationCondition {
 		if(this.getFileType() == FileType.thisFile){
 			result += "diese Datei '" + file.getAbsolutePath() + "' ";
 		} else{
-			result += "andere Datei '" + new File(Util.replacePlaceholders(this.getFileText(), file)).getAbsolutePath() + "' ";
+			result += "andere Datei '" + new File(Util.replacePlaceholders(this.getFileText(), file, true)).getAbsolutePath() + "' ";
 		}
 		
 		switch(this.getConditionType()){
@@ -204,6 +209,10 @@ public class OperationCondition {
 			}
 			case endsWith:{
 				result += "endet " + (this.isNegated() ? "nicht " : "") + "mit \"" + this.getConditionText() + "\"" + (this.isTextRegex() ? " (Regex)" : "");
+				break;
+			}
+			case liesIn:{
+				result += "liegt " + (this.isNegated() ? "nicht " : "") + "in \"" + Util.replacePlaceholders(this.getConditionText(), file, false) + "\"" + (this.isTextRegex() ? " (Regex)" : "");
 				break;
 			}
 			default:{

@@ -159,6 +159,7 @@ public class GuiUtil {
 		OperationCondition.ConditionType conditionType = null;
 		String otherFileString = null;
 		String conditionTextString = ((TextArea) layout.lookup("#" + Ids.condition_taConditionText)).getText();
+		conditionTextString = conditionTextString.replaceAll("\n", "\r\n").replaceAll("\r\r", "\r");
 		boolean isActive = ((CheckBox) layout.lookup("#" + Ids.condition_cbActive)).isSelected();
 		boolean textRegex = ((CheckBox) layout.lookup("#" + Ids.condition_cbTextRegex)).isSelected();
 		boolean negation = ((CheckBox) layout.lookup("#" + Ids.condition_cbNegation)).isSelected();
@@ -192,6 +193,9 @@ public class GuiUtil {
 					break;
 				case Keys.Condition_endetMit:
 					conditionType = ConditionType.endsWith;
+					break;
+				case Keys.Condition_liegtIn:
+					conditionType = ConditionType.liesIn;
 					break;
 				default:
 					Log.log("Unmöglicher conditionTypeString Wert in GuiUtil.getConditionValueMap()", Log.Level.FATAL);
@@ -242,11 +246,13 @@ public class GuiUtil {
 		switch(operation){
 			case Keys.Operation_anfuegen: {
 				String addString = GuiUtil.lookupTextArea(layout, "#" + Ids.parameter_taAddString).getText();
+				addString = addString.replaceAll("(?!\\r)\\n", "\r\n");
 				params.put(Keys.Params_addString, addString);
 				break;
 			}
 			case Keys.Operation_einfuegen: {
 				String insertString = GuiUtil.lookupTextArea(layout, "#" + Ids.parameter_taInsertString).getText();
+				insertString = insertString.replaceAll("(?!\\r)\\n", "\r\n");
 				String positionCondition = (String) GuiUtil.lookupComboBox(layout, "#" + Ids.parameter_comboPositionEinfuegen).getValue();
 				String target = GuiUtil.lookupTextField(layout, "#" + Ids.parameter_tfPositionZielWert).getText();
 				params.put(Keys.Params_insertString, insertString);
@@ -256,7 +262,9 @@ public class GuiUtil {
 			}
 			case Keys.Operation_ersetzen: {
 				String replacement = GuiUtil.lookupTextArea(layout, "#" + Ids.parameter_taErsetzText).getText();
+				replacement = replacement.replaceAll("(?!\\r)\\n", "\r\n");
 				String target = GuiUtil.lookupTextArea(layout, "#" + Ids.parameter_taErsetzZielText).getText();
+				target = target.replaceAll("(?!\\r)\\n", "\r\n");
 				Boolean replaceRegex = new Boolean(GuiUtil.lookupCheckBox(layout, "#" + Ids.parameter_cbErsetzenRegex).isSelected());
 				params.put(Keys.Params_replacement, replacement);
 				params.put(Keys.Params_target, target);

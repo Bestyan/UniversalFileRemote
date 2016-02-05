@@ -158,7 +158,7 @@ public class FileLoader {
 				list.addAll(this.collectRegexFilesRecursive(file, filenames, withPath));
 			} else {
 				if(withPath){
-					if(file.exists() && Util.containsRegexMatch(filenames, file.getAbsolutePath())){
+					if(file.exists() && Util.containsContainsRegexMatch(filenames, file.getAbsolutePath())){
 						list.add(file);
 					}
 				} else if(file.exists() && Util.containsRegexMatch(filenames, file.getName())){
@@ -184,7 +184,7 @@ public class FileLoader {
 			}
 			if(file.isDirectory()){
 				if(withPath){
-					if(file.exists() && Util.containsRegexMatch(filenames, file.getAbsolutePath())){
+					if(file.exists() && Util.containsContainsRegexMatch(filenames, file.getAbsolutePath())){
 						list.add(file);
 					} else{
 						list.addAll(this.collectRegexFoldersRecursive(file, filenames, withPath));

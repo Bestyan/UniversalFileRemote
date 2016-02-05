@@ -149,6 +149,9 @@ public class Util {
 		int workspaceEnd = path.indexOf("workspace") + "workspace\\".length();
 		String pathStartingWithProject = path.substring(workspaceEnd);
 		int projectEnd = pathStartingWithProject.indexOf("\\");
+		if(projectEnd == -1){
+			projectEnd = path.length();
+		}
 		String result = path.substring(0, projectEnd + workspaceEnd);
 		return result;
 	}
@@ -212,7 +215,7 @@ public class Util {
 		}
 	}
 	
-	public static String replacePlaceholders(String newPath, File file){
+	public static String replacePlaceholders(String newPath, File file, boolean appendFileName){
 		newPath = newPath.replace("/", "\\");
 		String project = "";
 		String parent = "";
@@ -240,8 +243,17 @@ public class Util {
 		}
 		String result = newPath.replace("<project>", project + "\\");
 		result = result.replaceAll("<parent[0-9]*>", Matcher.quoteReplacement(parent));
-		if(result.endsWith("\\")){
+		if(result.endsWith("\\") && appendFileName){
 			result += file.getName();
+		}
+		return result;
+	}
+	
+	public static ArrayList<String> replacePlaceholders(ArrayList<String> list, File file){
+		ArrayList<String> result = new ArrayList<>();
+		for(String string : list){
+			String replaced = replacePlaceholders(string, file, true);
+			result.add(replaced);
 		}
 		return result;
 	}
@@ -356,6 +368,23 @@ public class Util {
 			return matcher.find();
 		} else{
 			return fileText.endsWith(target);
+		}
+	}
+	
+	public static boolean fileLiesIn(File file, String target, boolean regex){
+		if(!file.exists() || target == null){
+			return false;
+		}
+		
+		String path = target;
+		if(!regex){
+			path = Util.replacePlaceholders(path, file, false);
+		}
+		File parentDir = new File(path);
+		if(regex){
+			return file.getParentFile().getAbsolutePath().matches(path);
+		} else {
+			return parentDir.exists() && parentDir.getAbsolutePath().equals(file.getParentFile().getAbsolutePath());
 		}
 	}
 	

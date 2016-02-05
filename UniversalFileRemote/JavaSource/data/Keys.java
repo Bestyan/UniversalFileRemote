@@ -55,6 +55,7 @@ public class Keys {
 	public static final String Condition_enthaelt = "enthält";
 	public static final String Condition_beginntMit = "beginnt mit";
 	public static final String Condition_endetMit = "endet mit";
+	public static final String Condition_liegtIn = "liegt in";
 	
 	
 }

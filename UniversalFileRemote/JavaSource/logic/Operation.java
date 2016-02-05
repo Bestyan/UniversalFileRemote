@@ -260,7 +260,7 @@ public class Operation {
 
 		String targetPath = "";
 		try {
-			targetPath = Util.replacePlaceholders(newPath, file);
+			targetPath = Util.replacePlaceholders(newPath, file, true);
 			File output = new File(targetPath);
 			if(!overwriteExisting && !this.checkSurroundings(output, createDirs)){
 				return;
@@ -301,7 +301,7 @@ public class Operation {
 		
 		String targetPath = "";
 		try {
-			targetPath = Util.replacePlaceholders(newPath, file);
+			targetPath = Util.replacePlaceholders(newPath, file, true);
 			File output = new File(targetPath);
 			if(createDirs){
 				output.getParentFile().mkdirs();

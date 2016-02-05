@@ -160,42 +160,31 @@ public class Validator {
 				return false;
 			}
 		}
+		if(conditionType == ConditionType.liesIn && fileType != FileType.thisFile){
+			return false;
+		}
 		return true;
 	}
 	
 	public static boolean validateStartOperation(Pane layout){
 		boolean valid = true;
-		HashMap<String, Object> params = GuiUtil.getMandatoryParams(layout.getScene());
 		String operation = (String)((ComboBox<?>)layout.lookup("#" + Ids.main_comboOperation)).getValue();
 		
 		if(Util.isNullOrEmpty(operation)){
 			return false;
 		}
+		HashMap<String, Object> params = GuiUtil.getParamsFor(layout, operation);
 		
 		switch(operation){
 			case Keys.Operation_anfuegen: {
-				String addString = GuiUtil.lookupTextArea(layout, "#" + Ids.parameter_taAddString).getText();
-				params.put(Keys.Params_addString, addString);
 				valid = Validator.checkAddParams(params);
 				break;
 			}
 			case Keys.Operation_einfuegen: {
-				String insertString = GuiUtil.lookupTextArea(layout, "#" + Ids.parameter_taInsertString).getText();
-				String positionCondition = (String) GuiUtil.lookupComboBox(layout, "#" + Ids.parameter_comboPositionEinfuegen).getValue();
-				String target = GuiUtil.lookupTextField(layout, "#" + Ids.parameter_tfPositionZielWert).getText();
-				params.put(Keys.Params_insertString, insertString);
-				params.put(Keys.Params_positionCondition, positionCondition);
-				params.put(Keys.Params_target, target);
 				valid = Validator.checkInsertParams(params);
 				break;
 			}
 			case Keys.Operation_ersetzen: {
-				String replacement = GuiUtil.lookupTextArea(layout, "#" + Ids.parameter_taErsetzText).getText();
-				String target = GuiUtil.lookupTextArea(layout, "#" + Ids.parameter_taErsetzZielText).getText();
-				Boolean replaceRegex = new Boolean(GuiUtil.lookupCheckBox(layout, "#" + Ids.parameter_cbErsetzenRegex).isSelected());
-				params.put(Keys.Params_replacement, replacement);
-				params.put(Keys.Params_target, target);
-				params.put(Keys.Params_replaceRegex, replaceRegex);
 				valid = Validator.checkReplaceParams(params);
 				break;
 			}
@@ -206,30 +195,16 @@ public class Validator {
 			}
 			case Keys.Operation_dateiUmbenennen:
 			case Keys.Operation_ordnerUmbenennen:{
-				String newName = GuiUtil.lookupTextField(layout, "#" + Ids.parameter_tfNeuerDateiname).getText();
-				params.put(Keys.Params_newName, newName);
 				valid = Validator.checkRenameFilesParams(params);
 				break;
 			}
 			case Keys.Operation_dateiVerschieben:
 			case Keys.Operation_ordnerVerschieben:{
-				String newPath = GuiUtil.lookupTextField(layout, "#" + Ids.parameter_tfNeuerSpeicherort).getText();
-				params.put(Keys.Params_newPath, newPath);
-				Boolean overwriteExisting = new Boolean(GuiUtil.lookupCheckBox(layout, "#" + Ids.parameter_cbDateienUeberschreiben).isSelected());
-				params.put(Keys.Params_overwriteExisting, overwriteExisting);
-				Boolean createDirs = new Boolean(GuiUtil.lookupCheckBox(layout, "#" + Ids.parameter_cbVerzeichnisseErstellen).isSelected());
-				params.put(Keys.Params_createDirs, createDirs);
 				valid = Validator.checkMoveOrCopyFilesParams(params);
 				break;
 			}
 			case Keys.Operation_dateiKopieren:
 			case Keys.Operation_ordnerKopieren:{
-				String newPath = GuiUtil.lookupTextField(layout, "#" + Ids.parameter_tfNeuerSpeicherort).getText();
-				params.put(Keys.Params_newPath, newPath);
-				Boolean overwriteExisting = new Boolean(GuiUtil.lookupCheckBox(layout, "#" + Ids.parameter_cbDateienUeberschreiben).isSelected());
-				params.put(Keys.Params_overwriteExisting, overwriteExisting);
-				Boolean createDirs = new Boolean(GuiUtil.lookupCheckBox(layout, "#" + Ids.parameter_cbVerzeichnisseErstellen).isSelected());
-				params.put(Keys.Params_createDirs, createDirs);
 				valid = Validator.checkMoveOrCopyFilesParams(params);
 				break;
 			}
