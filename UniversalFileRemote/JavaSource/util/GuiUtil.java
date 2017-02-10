@@ -273,10 +273,12 @@ public class GuiUtil {
 				String target = GuiUtil.lookupTextArea(layout, "#" + Ids.parameter_taErsetzZielText).getText();
 				target = target.replaceAll("(?!\\r)\\n", "\r\n");
 				Boolean replaceRegex = new Boolean(GuiUtil.lookupCheckBox(layout, "#" + Ids.parameter_cbErsetzenRegex).isSelected());
+				Boolean placeholdersEnabled = new Boolean(GuiUtil.lookupCheckBox(layout, "#" + Ids.parameter_cbErsetzenPlatzhalter).isSelected());
 				params.put(Keys.Params_replacement, replacement);
 				params.put(Keys.Params_target, target);
 				params.put(Keys.Params_replaceRegex, replaceRegex);
 				params.put(Keys.Params_replacementGroup, replacementGroup);
+				params.put(Keys.Params_replacementPlaceholdersEnabled, placeholdersEnabled);
 				break;
 			}
 			case Keys.Operation_dateiLoeschen:

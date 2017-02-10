@@ -215,7 +215,13 @@ public class Util {
 		}
 	}
 	
-	public static String replacePlaceholders(String newPath, File file, boolean appendFileName){
+	public static String replacePlaceholders(String input, File fileToBeChanged){
+		String result = input.replace("<project>", getProjectDirectory(fileToBeChanged));
+		result = result.replace("<projectname>", getProjectName(fileToBeChanged));
+		return result;
+	}
+	
+	public static String replacePathPlaceholders(String newPath, File file, boolean appendFileName){
 		newPath = newPath.replace("/", "\\");
 		String project = "";
 		String parent = "";
@@ -249,10 +255,10 @@ public class Util {
 		return result;
 	}
 	
-	public static ArrayList<String> replacePlaceholders(ArrayList<String> list, File file){
+	public static ArrayList<String> replacePathPlaceholders(ArrayList<String> list, File file){
 		ArrayList<String> result = new ArrayList<>();
 		for(String string : list){
-			String replaced = replacePlaceholders(string, file, true);
+			String replaced = replacePathPlaceholders(string, file, true);
 			result.add(replaced);
 		}
 		return result;
@@ -378,7 +384,7 @@ public class Util {
 		
 		String path = target;
 		if(!regex){
-			path = Util.replacePlaceholders(path, file, false);
+			path = Util.replacePathPlaceholders(path, file, false);
 		}
 		File parentDir = new File(path);
 		if(regex){

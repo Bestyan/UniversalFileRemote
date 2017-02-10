@@ -86,4 +86,13 @@ public class TooltipFactory {
 		tooltip.setWrapText(true);
 		return tooltip;
 	}
+	
+	public static Tooltip getReplacementPlaceholderTooltip(){
+		Tooltip tooltip = new Tooltip("Spezielle Tags werden als Platzhalter interpretiert. Momentan implementiert sind:"
+				+ "\r\n<project> = Pfad zum Projekt (D:\\eclipseMars\\workspace\\..)"
+				+ "\r\n<projectname> = Name des Projekts (com.athos.test)");
+		tooltip.setPrefWidth(200);
+		tooltip.setWrapText(true);
+		return tooltip;
+	}
 }

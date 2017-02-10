@@ -88,7 +88,7 @@ public class OperationCondition {
 			targetFile = file;
 		} else if(fileType == FileType.otherFile){
 			String newPath = this.getFileText();
-			String actualPath = Util.replacePlaceholders(newPath, file, true);
+			String actualPath = Util.replacePathPlaceholders(newPath, file, true);
 			targetFile = new File(actualPath);
 		} else{
 			Log.log("unmöglicher fileType Wert in OperationCondition.isMet", Log.Level.FATAL);
@@ -191,7 +191,7 @@ public class OperationCondition {
 		if(this.getFileType() == FileType.thisFile){
 			result += "diese Datei '" + file.getAbsolutePath() + "' ";
 		} else{
-			result += "andere Datei '" + new File(Util.replacePlaceholders(this.getFileText(), file, true)).getAbsolutePath() + "' ";
+			result += "andere Datei '" + new File(Util.replacePathPlaceholders(this.getFileText(), file, true)).getAbsolutePath() + "' ";
 		}
 		
 		switch(this.getConditionType()){
@@ -212,7 +212,7 @@ public class OperationCondition {
 				break;
 			}
 			case liesIn:{
-				result += "liegt " + (this.isNegated() ? "nicht " : "") + "in \"" + Util.replacePlaceholders(this.getConditionText(), file, false) + "\"" + (this.isTextRegex() ? " (Regex)" : "");
+				result += "liegt " + (this.isNegated() ? "nicht " : "") + "in \"" + Util.replacePathPlaceholders(this.getConditionText(), file, false) + "\"" + (this.isTextRegex() ? " (Regex)" : "");
 				break;
 			}
 			default:{

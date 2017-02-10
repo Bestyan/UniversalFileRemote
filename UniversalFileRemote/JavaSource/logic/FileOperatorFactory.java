@@ -10,7 +10,7 @@ import util.Util;
 
 public class FileOperatorFactory {
 
-	public static FileOperator getFileOperatorBasicReplace(ArrayList<File> files, ArrayList<OperationCondition> conditions, String target, String replacement, boolean isRegex, boolean isReplacementGroup){
+	public static FileOperator getFileOperatorBasicReplace(ArrayList<File> files, ArrayList<OperationCondition> conditions, String target, String replacement, boolean isRegex, boolean isReplacementGroup, boolean placeholdersEnabled){
 		Operation operation = new Operation(Type.replace);
 		Util.setConditionsLink(operation, conditions);
 		{
@@ -19,6 +19,7 @@ public class FileOperatorFactory {
 			operationData.put(Keys.Params_replacement, replacement);
 			operationData.put(Keys.Params_isRegex, new Boolean(isRegex));
 			operationData.put(Keys.Params_replacementGroup, new Boolean(isReplacementGroup));
+			operationData.put(Keys.Params_replacementPlaceholdersEnabled, new Boolean(placeholdersEnabled));
 			operationData.put(Keys.Params_conditions, conditions);
 			operation.setOperationData(operationData);
 		}

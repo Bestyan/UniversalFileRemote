@@ -84,6 +84,8 @@ public class Operation {
 	 * 			<li>replaceString - String</li>
 	 * 			<li>replacement - String</li>
 	 * 			<li>isRegex - Boolean</li>
+	 * 			<li>replacementGroup - Boolean</li>
+	 * 			<li>replacementPlaceholdersEnabled - Boolean</li>
 	 * 		</ul>
 	 * 	</li>
 	 * 	<li>deleteFile
@@ -130,38 +132,38 @@ public class Operation {
 		}
 	}
 
-	protected void operate(File f){
+	protected void operate(File file){
 		ArrayList<OperationCondition> conditions = (ArrayList<OperationCondition>) this.getOperationData().get(Keys.Params_conditions);
 		for(OperationCondition con : conditions){
-			if(!con.isMet(f)){
-				Log.log("Bedingung " + con.toString(f) + " nicht erfüllt in " + f.getAbsolutePath(), Log.Level.INFO);
+			if(!con.isMet(file)){
+				Log.log("Bedingung " + con.toString(file) + " nicht erfüllt in " + file.getAbsolutePath(), Log.Level.INFO);
 				return;
 			}
 		}
 		switch(this.getType()){
 			case insert:
-				this.insert(f);
+				this.insert(file);
 				break;
 			case add:
-				this.add(f);
+				this.add(file);
 				break;
 			case replace:
-				this.replace(f);
+				this.replace(file);
 				break;
 			case deleteFile:
-				this.deleteFile(f);
+				this.deleteFile(file);
 				break;
 			case renameFile:
-				this.renameFile(f);
+				this.renameFile(file);
 				break;
 			case moveFile:
-				this.moveFile(f);
+				this.moveFile(file);
 				break;
 			case copyFile:
-				this.copyFile(f);
+				this.copyFile(file);
 				break;
 			case copyAbsoluteFile:
-				this.copyAbsoluteFile(f);
+				this.copyAbsoluteFile(file);
 				break;
 			default:
 		}
@@ -176,7 +178,12 @@ public class Operation {
 		String replacement = (String) this.getOperationData().get(Keys.Params_replacement);
 		Boolean isRegex = (Boolean) this.getOperationData().get(Keys.Params_isRegex);
 		Boolean isReplacementGroup = (Boolean) this.getOperationData().get(Keys.Params_replacementGroup);
+		Boolean placeholdersEnabled = (Boolean) this.getOperationData().get(Keys.Params_replacementPlaceholdersEnabled);
 		String fileText = Util.readFile(file);
+		
+		if(placeholdersEnabled){
+			replacement = Util.replacePlaceholders(replacement, file);
+		}
 
 		if(isReplacementGroup){
 			try{
@@ -296,7 +303,7 @@ public class Operation {
 
 		String targetPath = "";
 		try {
-			targetPath = Util.replacePlaceholders(newPath, file, true);
+			targetPath = Util.replacePathPlaceholders(newPath, file, true);
 			File output = new File(targetPath);
 			if(!overwriteExisting && !this.checkSurroundings(output, createDirs)){
 				return;
@@ -337,7 +344,7 @@ public class Operation {
 		
 		String targetPath = "";
 		try {
-			targetPath = Util.replacePlaceholders(newPath, file, true);
+			targetPath = Util.replacePathPlaceholders(newPath, file, true);
 			File output = new File(targetPath);
 			if(createDirs){
 				output.getParentFile().mkdirs();

@@ -25,6 +25,7 @@ public class Ids {
 	public static final String parameter_tfPositionZielWert = "insertPositionConditionValue";
 	public static final String parameter_cbErsetzenRegex = "replaceRegex";
 	public static final String parameter_cbErsetzenMatcher = "replacementMatcherGroup";
+	public static final String parameter_cbErsetzenPlatzhalter = "replacementPlaceholder";
 	public static final String parameter_taErsetzZielText = "replaceTarget";
 	public static final String parameter_taErsetzText = "replacement";
 	public static final String parameter_tfNeuerDateiname = "fileNewName";

@@ -177,6 +177,10 @@ public class EventHandlerFactory {
 		cbMatcher.setId(Ids.parameter_cbErsetzenMatcher);
 		cbMatcher.setTooltip(TooltipFactory.getMatcherGroupTooltip());
 		parameterPane.add(cbMatcher, 0, 4);
+		CheckBox cbPlatzhalter = new CheckBox("Platzhalter");
+		cbPlatzhalter.setId(Ids.parameter_cbErsetzenPlatzhalter);
+		cbPlatzhalter.setTooltip(TooltipFactory.getReplacementPlaceholderTooltip());
+		parameterPane.add(cbPlatzhalter, 0, 5);
 		
 		TextArea taTargetString = new TextArea();
 		taTargetString.setPrefRowCount(4);

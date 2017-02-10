@@ -45,8 +45,9 @@ public class Logic {
 		String target = (String) params.get(Keys.Params_target);
 		String replacement = (String) params.get(Keys.Params_replacement);
 		Boolean replaceRegex = (Boolean) params.get(Keys.Params_replaceRegex);
+		Boolean placeholdersEnabled = (Boolean) params.get(Keys.Params_replacementPlaceholdersEnabled);
 		ArrayList<File> files = FileLoader.loadFiles(targetWorkspace, isRegex, ignoreCase, onlyProjects, withPath, Util.splitFilenames(fileNames));
-		FileOperator fileOp = FileOperatorFactory.getFileOperatorBasicReplace(files, conditions, target, replacement, replaceRegex, isReplacementGroup);
+		FileOperator fileOp = FileOperatorFactory.getFileOperatorBasicReplace(files, conditions, target, replacement, replaceRegex, isReplacementGroup, placeholdersEnabled);
 		fileOp.start();
 	}
 	
